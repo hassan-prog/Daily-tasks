@@ -31,6 +31,7 @@ int main() {
 			{
 			case '1':
 			{
+				std::cout << "option";
 				std::cout << "Enter the number: \n";
 				int value;
 				std::cin >> value;
