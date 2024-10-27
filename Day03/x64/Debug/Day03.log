@@ -1,5 +1,2 @@
 ﻿  Day03.cpp
-C:\Users\hassa\Desktop\Daily-tasks\Day03.cpp(42,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hassa\Desktop\Daily-tasks\Day03.cpp(65,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hassa\Desktop\Daily-tasks\Day03.cpp(61,1): warning C4715: 'MergeSort': not all control paths return a value
   Day03.vcxproj -> C:\Users\hassa\Desktop\Daily-tasks\x64\Debug\Day03.exe
