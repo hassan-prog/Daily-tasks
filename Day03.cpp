@@ -1,82 +1,128 @@
 #include <iostream>
 #include <vector>
 
-#define LOG(v) std::cout << v
-
 using namespace std;
 
-void Swap(vector<int>* numbers, int index1, int index2) {
-	int temp = (*numbers)[index1];
-	(*numbers)[index1] = (*numbers)[index2];
-	(*numbers)[index2] = temp;
-}
+struct Node {
+	int id;
+	string name;
+	Node* next;
+	Node* prev;
 
-void BubbleSort(vector<int>* numbers) {
-	for (int i = 0; i < (*numbers).size(); i++) {
-		for (int j = i + 1; j < numbers->size(); j++)
-		{
-			if ((*numbers)[i] > (*numbers)[j])
-				Swap(numbers, i, j);
+	void PrintNode() {
+		cout << "Name : " << name << "| ID : " << id << '\n';
+	}
+
+};
+
+struct LinkedList {
+	Node* first = NULL;
+	Node* lastInserted = NULL;
+	int id = 1;
+
+	void PushBack(Node* head) {
+		if (first == nullptr) {
+			first = head;
+			lastInserted = head;
+		}
+		else {
+			lastInserted->next = head;
+			head->prev = lastInserted;
+			lastInserted = head;
+		}
+
+		head->next = nullptr;
+		head->id = id++;
+	}
+
+	Node* search(int id) {
+		Node* curr = first;
+		if (first == NULL) {
+			cout << "The list is empty";
+			return NULL;
+		}
+		while (curr) {
+			if (curr->id == id) {
+				return curr;
+			}
+			curr = curr->next;
+		}
+		return NULL;
+	}
+
+	void deleteEmp(Node* Emp) {
+		if (Emp == NULL) {
+			return;
+		}
+		Node* curr = search(Emp->id);
+
+		if (curr == NULL) {
+			return;
+		}
+
+		if (curr->prev != NULL) {
+			curr->prev->next = curr->next;
+		}
+
+		if (curr->next != NULL) {
+			curr->next->prev = curr->prev;
+		}
+
+		if (Emp == curr) {
+			Emp = curr->next;
 		}
 	}
-}
 
-vector<int> insertionSort(vector<int> numbers) {
-	int j;
-	for (int i = 0; i < numbers.size(); i++) {
-		int key = numbers[i];
-		j = i - 1;
 
-		while (j >= 0 && key < numbers[j]) {
-			numbers[j + 1] = numbers[j];
-			j--;
+	void replaceEmp(Node* oldNode, Node* newNode) {
+		if (oldNode->prev != NULL) {
+			oldNode->prev->next = newNode;
+			newNode->prev = oldNode->prev;
 		}
-		numbers[j + 1] = key;
-	}
-	return numbers;
-}
-
-vector<int> MergeSort(vector<int> numbers) {
-	int size = numbers.size();
-	if (size <= 2) {
-		if (size == 2) {
-			if (numbers[0] > numbers[1])
-				Swap(&numbers, 0, 1);
-			return numbers;
+		if (oldNode->next != NULL) {
+			oldNode->next->prev = newNode;
+			newNode->next = oldNode->next;
 		}
-		return numbers;
+		newNode->id = id++;
+		oldNode = NULL;
 	}
 
-	vector<int> vec1;
-	vector<int> vec2;
+	void printList(Node* head) {
+		Node* curr = head;
+		while (curr != NULL) {
+			cout << "Emp name: " << curr->name << ", Emp ID: " << curr->id << '\n';
+			curr = curr->next;
+		}
+	}
 
-	for (int i = 0; i < size / 2; i++) {
-		vec1.push_back(numbers[i]);
-	}
-	for (int i = size / 2; i < size; i++) {
-		vec2.push_back(numbers[i]);
-	}
-}
-
-void PrintVector(vector<int>* numbers) {
-	for (int i = 0; i < (*numbers).size(); i++) {
-		LOG((*numbers)[i]);
-	}
-}
+};
 
 int main()
 {
-	std::vector<int> numbers = { 9,2,3,0,6,3,5 };
-	PrintVector(&numbers);
-	cout << '\n';
+	LinkedList Employees;
 
-	numbers = insertionSort(numbers);
+	Node firstNode;
+	Node secondNode;
+	Node thirdNode;
+	Node forthNode;
+	firstNode.name = "Alaa";
 
-	PrintVector(&numbers);
-	cout << '\n';
-	BubbleSort(&numbers);
+	secondNode.name = "Fadl";
 
-	PrintVector(&numbers);
-	cout << '\n';
+	thirdNode.name = "Ahmed";
 
+	forthNode.name = "Merna";
+
+	Employees.PushBack(&firstNode);
+	Employees.PushBack(&secondNode);
+	Employees.PushBack(&thirdNode);
+	Employees.printList(&firstNode);
+
+	Employees.deleteEmp(&secondNode);
+	Employees.printList(&firstNode);
+
+	Employees.replaceEmp(&secondNode, &forthNode);
+	Employees.printList(&firstNode);
+
+	//cout << Employees.search(3)->name << "this is my node";
 }

@@ -1,10 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\hassa\\Desktop\\Daily-Task\\Day03\\",
+  "WorkspaceRootPath": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hassa\\Desktop\\Daily-Task\\Day03\\Day03.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Day03.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{87383F54-744E-4E39-A095-19B37CE0A161}|Day03.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\Day03.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{87383F54-744E-4E39-A095-19B37CE0A161}|Day03.vcxproj|solutionrelative:Day03.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Day03.cpp",
-              "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-Task\\Day03\\Day03.cpp",
+              "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Day03.cpp",
               "RelativeDocumentMoniker": "Day03.cpp",
-              "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-Task\\Day03\\Day03.cpp",
-              "RelativeToolTip": "Day03.cpp",
-              "ViewState": "AgIAAAkAAAAAAAAAAADwvw8AAAAUAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Day03.cpp*",
+              "RelativeToolTip": "Day03.cpp*",
+              "ViewState": "AgIAAJQAAAAAAAAAAAAwwKgAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-27T06:40:15.083Z",
               "EditorCaption": ""
