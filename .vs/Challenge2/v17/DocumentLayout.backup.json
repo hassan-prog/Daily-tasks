@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5AF2A274-CCE5-4B4A-88AA-D6ACF84E60B0}|Challenge2.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\Headers\\task2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5AF2A274-CCE5-4B4A-88AA-D6ACF84E60B0}|Challenge2.vcxproj|solutionrelative:Headers\\task2.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5AF2A274-CCE5-4B4A-88AA-D6ACF84E60B0}|Challenge2.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\Inventory.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5AF2A274-CCE5-4B4A-88AA-D6ACF84E60B0}|Challenge2.vcxproj|solutionrelative:Inventory.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5AF2A274-CCE5-4B4A-88AA-D6ACF84E60B0}|Challenge2.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\HEADERS\\TASK1.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5AF2A274-CCE5-4B4A-88AA-D6ACF84E60B0}|Challenge2.vcxproj|solutionrelative:HEADERS\\TASK1.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "task2.h",
+              "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Headers\\task2.h",
+              "RelativeDocumentMoniker": "Headers\\task2.h",
+              "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Headers\\task2.h",
+              "RelativeToolTip": "Headers\\task2.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-10-27T09:26:27.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "task1.h",
+              "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Headers\\task1.h",
+              "RelativeDocumentMoniker": "Headers\\task1.h",
+              "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Headers\\task1.h",
+              "RelativeToolTip": "Headers\\task1.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-10-27T08:39:26.514Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Inventory.cpp",
+              "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Inventory.cpp",
+              "RelativeDocumentMoniker": "Inventory.cpp",
+              "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Inventory.cpp",
+              "RelativeToolTip": "Inventory.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-10-27T08:37:08.683Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

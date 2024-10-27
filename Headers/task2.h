@@ -12,8 +12,6 @@ void FactorialWithPointer(int* number, int number_) {
 	// this is to make sure that in the first iteration the value of
 	// number_ has to be less than the *number by one
 	if (number_ == *number) {
-		std::cout << number_;
-
 		number_--;
 	}
 

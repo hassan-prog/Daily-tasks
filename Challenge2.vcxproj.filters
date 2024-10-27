@@ -20,13 +20,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="task3.h">
+    <ClInclude Include="Headers\task1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="task1.h">
+    <ClInclude Include="Headers\task2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="task2.h">
+    <ClInclude Include="Headers\task3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

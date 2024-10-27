@@ -1,8 +1,8 @@
 #include <iostream>
 //#include <vector>
-#include "../Headers/task1.h"
-#include "../Headers/task2.h"
-#include "../Headers/task3.h"
+#include "../Daily-tasks/Headers/task1.h"
+#include "../Daily-tasks/Headers/task2.h"
+#include "../Daily-tasks/Headers/task3.h"
 
 int main() {
 	char cont;
@@ -29,7 +29,7 @@ int main() {
 			std::cin >> option;
 			switch (option)
 			{
-			case '1':
+			case 1:
 			{
 				std::cout << "Enter the number: \n";
 				int value;
@@ -40,23 +40,22 @@ int main() {
 
 				switch (ptrOption)
 				{
-				case '1': {
+				case 1: {
 					FactorialWithPointer(&value, value);
 
-					std::cout << value;
+					std::cout << value << '\n';
 					break;
-				}case '2': {
-					std::cout << Factorial(value);
+				}case 2: {
+					std::cout << Factorial(value) << '\n';
 					break;
 				}
 				default:
 					break;
 				}
+				break;
 			}
-			case '2':
+			case 2:
 			{
-				std::cout << option << '\n';
-
 				std::cout << "Enter the base number: \n";
 				int baseValue;
 				std::cin >> baseValue;
@@ -69,12 +68,12 @@ int main() {
 
 				switch (ptrOption)
 				{
-				case '1': {
+				case 1: {
 					pwrPtr(&baseValue, &secondNum);
-					std::cout << baseValue;
+					std::cout << baseValue << '\n';
 					break;
-				}case '2': {
-					std::cout << pwr(baseValue, secondNum);
+				}case 2: {
+					std::cout << pwr(baseValue, secondNum) << '\n';
 					break;
 				}
 				default:
