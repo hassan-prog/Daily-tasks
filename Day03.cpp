@@ -94,8 +94,9 @@ struct LinkedList {
 	}
 
 	LinkedList* mergeSort() {
-		if (!this || !this->first == NULL || !this->lastInserted == NULL)
-			return new LinkedList(*this);
+		if (!first || !first->next) // Base case for an empty or single-element list
+			return this;
+
 
 		int mid = size / 2;
 
@@ -169,11 +170,11 @@ int main()
 	forthNode.name = "Foad";
 	forthNode.id = 6;
 	fifthNode.name = "Fady";
-	fifthNode.id = 11;
+	fifthNode.id = 4;
 	sixthNode.name = "Ali";
-	sixthNode.id = 4;
+	sixthNode.id = 11;
 	seventhNode.name = "Mohamed";
-	seventhNode.id = 9;
+	seventhNode.id = 13;
 
 	Employees.PushBack(&firstNode);
 	Employees.PushBack(&secondNode);
@@ -198,8 +199,8 @@ int main()
 	Employees.printList();
 	cout << "delete and push back\n\n";
 
-	Employees.mergeSort();
-	Employees.printList();
+	LinkedList* newlist = Employees.mergeSort();
+	newlist->printList();
 	cout << "Merge sort test\n\n";
 
 	cout << "Emp with id 3: " << Employees.search(3)->name << '\n';
