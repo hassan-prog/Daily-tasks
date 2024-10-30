@@ -1,20 +1,124 @@
-// Day04.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+
+using string = std::string;
+
+struct Node {
+	string name;
+	string address;
+	int index;
+
+	Node* prev = NULL;
+};
+
+#pragma region StackImp
+struct Stack {
+	Node* top = NULL;
+
+	void push(Node* newNode) {
+		if (top == NULL) {
+			top = newNode;
+			return;
+		}
+		newNode->prev = top;
+		top = newNode;
+	}
+	Node* pop() {
+		if (top == NULL) {
+			std::cout << "The stack is empty \n";
+			return NULL;
+		}
+		Node* temp;
+		temp = top;
+
+		top = top->prev;
+		return temp;
+	}
+};
+
+#pragma endregion
+
+struct Student {
+	Node* first = NULL;
+	Node* last = NULL;
+	int iter;
+
+	void enqueue(Node* newNode) {
+		if (first == NULL && last == NULL) {
+			iter = 0;
+			last = first = newNode;
+		}
+		last->prev = newNode;
+		last = newNode;
+		iter++;
+		last->index = iter;
+	}
+
+	Node* dequeue() {
+		if (first == NULL) {
+			std::cout << "The stack is empty\n";
+			return NULL;
+		}
+		Node* temp = first;
+		first = temp->prev;
+
+		iter--;
+		return temp;
+	}
+	Node* findStudent(int index) {
+		Node* current = first;
+		while (current != NULL) {
+			if (current->index == index) {
+				return current;
+			}
+			current = current->prev;
+		}
+		return NULL;
+	}
+
+	void addAtIndex(Node* newNode, int index) {
+		Node* temp = findStudent(index);
+		if (temp == NULL) {
+			enqueue(newNode);
+			return;
+		}
+		newNode->prev = temp->prev;
+		temp->prev = newNode;
+	}
+
+	void printQueue() {
+		Node* current = first;
+		for (int i = 0; i <= iter; i++) {
+			if (current != NULL) {
+				std::cout << "Name: " << current->name << '\n';
+				current = current->prev;
+			}
+		}
+	}
+};
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	Node node1;
+	Node node2;
+	Node node3;
+	Node node4;
+
+	Student student;
+
+	node1.name = "Ahmed";
+	node2.name = "Amr";
+	node3.name = "Mohamed";
+	node4.name = "Mahmoud";
+
+	student.enqueue(&node1);
+	student.enqueue(&node2);
+	student.enqueue(&node3);
+
+	std::cout << student.findStudent(1)->name << "\n\n\n";
+
+	student.printQueue();
+
+	student.addAtIndex(&node4, 2);
+
+	student.printQueue();
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
