@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cctype>
 
 using string = std::string;
 
@@ -59,7 +60,6 @@ struct Student {
 
 			last = first = newNode;
 			last->id = nextId;
-			index += 1;
 			return;
 		}
 		last->prev = newNode;
@@ -91,9 +91,29 @@ struct Student {
 		return NULL;
 	}
 
-	void addAtIndex(Node* newNode, int id) {
-		Node* temp = findStudent(id);
-		if (temp == NULL) {
+	Node* findStudByIndex(int j) {
+		Node* current = first;
+		for (int i = 0; i <= j; i++) {
+			current = current->prev;
+		}
+
+		/*while (current != NULL) {
+			if (current->id == id) {
+				return current;
+			}
+			current = current->prev;
+		}*/
+		return NULL;
+	}
+
+	void addAtIndex(Node* newNode, int j) {
+		Node* current = first;
+		for (int i = 0; i < j && current->prev != NULL; i++) {
+			current = current->prev;
+		}
+		Node* temp = current;
+
+		if (temp == NULL || (temp->prev == NULL && j != index)) {
 			enqueue(newNode);
 			return;
 		}
@@ -102,16 +122,17 @@ struct Student {
 		if (temp == first) {  // If inserting at the beginning
 			newNode->prev = first;
 			first = newNode;
+			index++;
 		}
 		else {
 			Node* prevNode = first;
-			while (prevNode->prev != temp && prevNode->prev != temp) { // Traverse to the node just before `temp`
+			while (prevNode->prev != temp) {
 				prevNode = prevNode->prev;
 			}
 			if (prevNode != NULL) {
 				newNode->prev = temp;
 				prevNode->prev = newNode;
-
+				index++;
 			}
 		}
 	}
@@ -187,61 +208,87 @@ struct StudentTree {
 
 int main()
 {
+	char quit;
+	do
 	{
-		Node node1;
-		Node node2;
-		Node node3;
-		Node node4;
+		int input;
+		std::cout << "To test the Queue functionality enter 1, to test the Binary tree enter 2.\n";
+		std::cin >> input;
 
-		Student student;
+		switch (input)
+		{
+		case 1: {
+			system("CLS");
+			std::cout << "Queue\n";
 
-		node1.name = "Ahmed";
-		node2.name = "Amr";
-		node3.name = "Mohamed";
-		node4.name = "Mahmoud";
+			Node node1;
+			Node node2;
+			Node node3;
+			Node node4;
+			Node node5;
 
-		student.enqueue(&node1);
-		student.enqueue(&node2);
-		student.enqueue(&node3);
+			Student student;
 
-		std::cout << "Using Enqueue" << "\n";
-		student.printQueue();
+			node1.name = "Ahmed";
+			node2.name = "Amr";
+			node3.name = "Mohamed";
+			node4.name = "Mahmoud";
 
-		Node* oldNode = student.dequeue();
-		std::cout << "\nUsing Dequeue: " << oldNode->name << "\n\n";
+			node5.name = "Merna";
 
-		std::cout << "Using search\nStudent name: " << student.findStudent(2)->name << "\n\n";
+			student.enqueue(&node1);
+			student.enqueue(&node2);
+			student.enqueue(&node3);
+			student.enqueue(&node4);
 
-		//student.printQueue();
+			std::cout << "Using Enqueue" << "\n";
+			student.printQueue();
 
-		student.addAtIndex(&node4, 2);
+			Node* oldNode = student.dequeue();
+			std::cout << "\nUsing Dequeue: " << oldNode->name << "\n\n";
 
-		student.printQueue();
-	}
+			std::cout << "Using search by index\nStudent name: " << student.findStudent(2)->name << "\n\n";
 
+			student.addAtIndex(&node5, 2);
 
-	std::cout << "\nBinary tree:\n";
-	TreeNode* s1 = new TreeNode();
-	TreeNode* s2 = new TreeNode();
-	TreeNode* s3 = new TreeNode();
-	TreeNode* s4 = new TreeNode();
+			student.printQueue();
+			std::cout << "Press any button to continue and 'q' to quit" << '\n';
+			std::cin >> quit;
+			break;
+		}
+		case 2: {
+			system("CLS");
+			std::cout << "Binary tree\n";
+			TreeNode* s1 = new TreeNode();
+			TreeNode* s2 = new TreeNode();
+			TreeNode* s3 = new TreeNode();
+			TreeNode* s4 = new TreeNode();
 
-	StudentTree tree;
+			StudentTree tree;
 
-	s1->name = "Khaled";
-	s2->name = "Mostafa";
-	s3->name = "Ali";
-	s4->name = "Omar";
+			s1->name = "Khaled";
+			s2->name = "Mostafa";
+			s3->name = "Ali";
+			s4->name = "Omar";
 
-	tree.insert(s1);
-	tree.insert(s2);
-	tree.insert(s3);
-	tree.insert(s4);
+			tree.insert(s1);
+			tree.insert(s2);
+			tree.insert(s3);
+			tree.insert(s4);
 
-	std::cout << "\nUsing insert \nRoot data: " << tree.root->name << '\n';
-	TreeNode* solution = tree.findStud(tree.root, 3);
+			std::cout << "\nUsing insert \nRoot data: " << tree.root->name << '\n';
+			TreeNode* solution = tree.findStud(tree.root, 3);
 
-	if (solution != NULL)
-		std::cout << "\nUsing search. \nStudent Name: " << solution->name << '\n';
+			if (solution != NULL)
+				std::cout << "\nUsing search by id. \nStudent Name: " << solution->name << '\n';
 
+			std::cout << "Press any button to continue and 'q' to quit" << '\n';
+			std::cin >> quit;
+
+			break;
+		}
+		default:
+			break;
+		}
+	} while (tolower(quit) != 'q');
 }
