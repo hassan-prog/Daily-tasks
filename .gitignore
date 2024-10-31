@@ -39,8 +39,6 @@ Day05/x64/Debug/vc143.pdb
 *.ipch
 *.idb
 
-/Day05
-x64/Debug/Day05.pdb
 /.vs
 /Day05
 /x64/Debug
