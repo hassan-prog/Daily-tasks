@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ComplexNum.cpp" />
     <ClCompile Include="Day05.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ComplexNum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

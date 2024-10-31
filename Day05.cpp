@@ -1,20 +1,43 @@
-// Day05.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include "ComplexNum.h"
+
+void addTwoCompNums(ComplexNum n1, ComplexNum n2) {
+    int realResult = n1.getReal() + n2.getReal();
+    int imagResult = n1.getImag() + n2.getImag();
+    ComplexNum result(realResult, imagResult);
+    
+    result.Display();
+}
+
+void subtractTwoCompNums(ComplexNum n1, ComplexNum n2) {
+    int realResult = n1.getReal() - n2.getReal();
+    int imagResult = n1.getImag() - n2.getImag();
+    ComplexNum result(realResult, imagResult);
+
+    result.Display();
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    ComplexNum firstNum(3, 2);
+    ComplexNum secondNum(2, 0);
+
+    std::cout << "adding: ";
+    firstNum.Display();
+    std::cout << "to: ";
+    secondNum.Display();
+    std::cout << "Result : ";
+    addTwoCompNums(firstNum, secondNum);
+    std::cout << '\n';
+
+    ComplexNum thirdNum(5, 1);
+    ComplexNum forthNum(2, 6);
+
+    std::cout << "subtracting: ";
+    thirdNum.Display();
+    std::cout << "from: ";
+    forthNum.Display();
+    std::cout << "Result : ";
+
+    subtractTwoCompNums(thirdNum, forthNum);
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
