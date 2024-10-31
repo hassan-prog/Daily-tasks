@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="ComplexNum.cpp" />
     <ClCompile Include="Day05.cpp" />
+    <ClCompile Include="Maze.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComplexNum.h" />
+    <ClInclude Include="Maze.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
