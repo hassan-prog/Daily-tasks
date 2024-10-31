@@ -2,15 +2,25 @@
 class ComplexNum
 {
 private:
-	int realNum;
-	int Imaginary;
+	float realNum = 0;
+	float Imaginary = 0;
 
 public:
-	ComplexNum(int real = 0, int imag = 0);
+	static int counter;
 
-	int getReal();
+	ComplexNum(const ComplexNum& num);
 
-	int getImag();
+	ComplexNum();
+	ComplexNum(float real = 0, float imag = 0);
+	ComplexNum(float real = 0);
+
+	~ComplexNum();
+
+	float getReal();
+	void setReal(float real);
+
+	float getImag();
+	void setImag(float imaginary);
 
 	void Display();
 };

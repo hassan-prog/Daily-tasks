@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|solutionrelative:ComplexNum.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\Day05.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|solutionrelative:Day05.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|solutionrelative:ComplexNum.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5B13D5A2-0F32-42BD-B06B-568A4F5EC684}|Day05.vcxproj|solutionrelative:ComplexNum.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,43 +22,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "ComplexNum.cpp",
               "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.cpp",
               "RelativeDocumentMoniker": "ComplexNum.cpp",
               "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.cpp",
               "RelativeToolTip": "ComplexNum.cpp",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABUAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-31T08:51:15.612Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ComplexNum.h",
               "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.h",
               "RelativeDocumentMoniker": "ComplexNum.h",
               "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\ComplexNum.h",
               "RelativeToolTip": "ComplexNum.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-10-31T08:50:22Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Day05.cpp",
               "DocumentMoniker": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Day05.cpp",
               "RelativeDocumentMoniker": "Day05.cpp",
               "ToolTip": "C:\\Users\\hassa\\Desktop\\Daily-tasks\\Day05.cpp",
               "RelativeToolTip": "Day05.cpp",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-31T06:41:06.821Z",
               "EditorCaption": ""
