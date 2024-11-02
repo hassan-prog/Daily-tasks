@@ -1,20 +1,41 @@
-// Day06.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include "ComplexNum.h"
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	ComplexNum firstNum(3, 2);
+	ComplexNum secondNum(2, 0);
+	ComplexNum thirdNum(2, 0);
+
+	std::cout << "first number: ";
+	firstNum.Display();
+	std::cout << "second number: ";
+	secondNum.Display();
+	std::cout << "third number: ";
+	thirdNum.Display();
+
+	ComplexNum additionResult;
+
+	additionResult = firstNum + secondNum;
+	std::cout << "Result of adding first and second: ";
+	additionResult.Display();
+	std::cout << '\n';
+
+	ComplexNum subResult;
+
+	subResult = firstNum - secondNum;
+	std::cout << "Result of subtracting first from second: ";
+	subResult.Display();
+	std::cout << '\n';
+
+	std::cout << "result of comparing first and second with == : ";
+	firstNum == secondNum ? std::cout << "true\n" : std::cout << "false\n";
+	std::cout << "result of comparing first and second with != : ";
+	firstNum != secondNum ? std::cout << "true\n" : std::cout << "false\n";
+
+	std::cout << '\n';
+	float complxSqr = firstNum;
+	std::cout << "casting first number: " << complxSqr << '\n';
+
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
