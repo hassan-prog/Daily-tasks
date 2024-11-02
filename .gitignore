@@ -421,3 +421,6 @@ FodyWeavers.xsd
 *.idb
 *.pdb
 *.pdb
+*.json
+*.db
+.vs/Day06/v17/.suo
