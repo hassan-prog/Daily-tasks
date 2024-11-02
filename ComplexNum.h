@@ -23,7 +23,13 @@ public:
 	void Display();
 
 	ComplexNum operator+ (const ComplexNum& addResult);
+	ComplexNum& operator++ (); //pre-fix
+	ComplexNum operator++ (int); //post-fix
 	ComplexNum operator- (const ComplexNum& subResult);
+	ComplexNum& operator-- (); //pre-fix
+	ComplexNum operator-- (int); //post-fix
+
+
 	void operator= (const ComplexNum& equalResult);
 	bool operator!= (const ComplexNum& compareResult);
 	bool operator== (const ComplexNum& compareResult);

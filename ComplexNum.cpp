@@ -59,12 +59,36 @@ ComplexNum ComplexNum::operator+(const ComplexNum& addResult) {
 	result.setImag(Imaginary + addResult.Imaginary);
 	return result;
 }
+
 ComplexNum ComplexNum::operator-(const ComplexNum& subResult) {
 	ComplexNum result;
 	result.setReal(realNum - subResult.realNum);
 	result.setImag(Imaginary - subResult.Imaginary);
 	return result;
 }
+
+ComplexNum& ComplexNum::operator++() {
+	++realNum;
+	return *this;
+}
+
+ComplexNum ComplexNum::operator++(int) {
+	ComplexNum temp = *this;
+	++realNum;
+	return temp;
+}
+
+ComplexNum& ComplexNum::operator--() {
+	--realNum;
+	return *this;
+}
+
+ComplexNum ComplexNum::operator--(int) {
+	ComplexNum temp = *this;
+	--realNum;
+	return temp;
+}
+
 void ComplexNum::operator=(const ComplexNum& equalResult) {
 	realNum = equalResult.realNum;
 	Imaginary = equalResult.Imaginary;
