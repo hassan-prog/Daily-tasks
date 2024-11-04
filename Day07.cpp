@@ -1,20 +1,96 @@
-// Day07.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+
+class GeometricShape {
+public:
+	virtual float calcArea() {
+		return 0;
+	}
+};
+
+class Circle : public GeometricShape {
+private:
+	float radius;
+	float pi = 3.1415;
+
+public:
+	Circle(float radius) {
+		this->radius = radius;
+	}
+
+	float calcArea()
+		override
+	{
+		return pi * radius * radius;
+	}
+};
+
+class Square : public GeometricShape {
+private:
+	float x;
+
+public:
+	Square(float x) {
+		this->x = x;
+	}
+
+	float calcArea()
+		override
+	{
+		return x * x;
+	}
+};
+
+class Triangle : public GeometricShape {
+private:
+	float l;
+	float height;
+
+public:
+	Triangle(float l, float height) {
+		this->l = l;
+		this->height = height;
+	}
+
+	float calcArea()
+		override
+	{
+		return 0.5 * l * height;
+	}
+};
+
+class Rectangle : public GeometricShape {
+
+private:
+	float x;
+	float y;
+
+public:
+	Rectangle(float x, float y) {
+		this->x = x;
+		this->y = y;
+	}
+
+	float calcArea()
+		override
+	{
+		return x * y;
+	}
+};
+
+
+void calcArea(GeometricShape* character) {
+	std::cout << "Area = " << character->calcArea() << '\n';
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	Circle Circ(3);
+	Triangle triangle(4, 6);
+	Square square(4);
+	Rectangle rect(5, 4);
+
+	calcArea(&Circ);
+	calcArea(&triangle);
+	calcArea(&square);
+	calcArea(&rect);
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
