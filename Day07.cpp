@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 class GeometricShape {
 public:
@@ -78,19 +79,44 @@ public:
 };
 
 
-void calcArea(GeometricShape* character) {
-	std::cout << "Area = " << character->calcArea() << '\n';
+float calcArea(GeometricShape* character) {
+	return character->calcArea();
 }
+
+
+float calcAvgArea(std::vector<GeometricShape*> shapes) {
+	int shapesLength = 0;
+	float areaSum = 0;
+
+	for (GeometricShape* shape : shapes)
+	{
+		areaSum += calcArea(shape);
+		shapesLength++;
+	}
+
+	return areaSum / shapesLength;
+}
+
+
 
 int main()
 {
-	Circle Circ(3);
+
+	std::vector<GeometricShape*> shapes;
+
+	Circle circleV1(3);
+	Circle circleV2(5);
 	Triangle triangle(4, 6);
 	Square square(4);
 	Rectangle rect(5, 4);
 
-	calcArea(&Circ);
-	calcArea(&triangle);
-	calcArea(&square);
-	calcArea(&rect);
+	shapes.push_back(&circleV1);
+	shapes.push_back(&circleV2);
+	shapes.push_back(&triangle);
+	shapes.push_back(&square);
+	shapes.push_back(&rect);
+
+	float avgArea = calcAvgArea(shapes);
+
+	std::cout << "The average for all areas: " << avgArea << "\n";
 }
