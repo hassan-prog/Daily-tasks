@@ -5,7 +5,7 @@
 //private functions
 void Collectable::initCollectable() {
 	generateRandomPosition(objPositionX, objPositionY);
-	shape.setRadius(40.0f);
+	shape.setRadius(8.0f);
 	shape.setPosition(objPositionX, objPositionY);
 	shape.setFillColor(sf::Color::Yellow);
 }
@@ -13,13 +13,11 @@ void Collectable::initCollectable() {
 void Collectable::initVars() {
 	windowHeight = 720;
 	windowWidth = 1080;
-	objPositionX = 30;
-	objPositionY = 30;
 }
 
 void Collectable::generateRandomPosition(float& maxX, float& maxY) {
-	maxX = rand() % ((windowWidth / 16) - 2) + 1;
-	maxY = rand() % ((windowHeight / 16) - 2) + 1;
+	maxX = static_cast<float>(rand() % (windowWidth - 8));
+	maxY = static_cast<float>(rand() % (windowHeight - 8));
 }
 
 //Constructors & Destructors

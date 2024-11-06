@@ -1,7 +1,5 @@
 #include "Snake.h"
 
-
-
 //private functions
 void Snake::initVars() {
 	snakeSize = sf::Vector2f(20.0f, 20.0f);
@@ -139,7 +137,7 @@ void Snake::render(sf::RenderWindow& window) {
 
 	// draws the body of the snake; "iter" being each segment
 	rectBody.setFillColor(bodyColor);
-	for (auto iter = snakeBody.begin() + 1; iter == snakeBody.end(); ++iter) {
+	for (auto iter = snakeBody.begin() + 1; iter != snakeBody.end(); ++iter) {
 		rectBody.setPosition(iter->position.x * size, iter->position.y * size);
 		window.draw(rectBody);
 	}

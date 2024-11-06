@@ -3,10 +3,10 @@
 #include "Snake.h"
 
 void main(int argc, char** argv[]) {
+	srand(time(0));
 	Game snakeGame; 
 
 	while (snakeGame.isRunning()) {
-		snakeGame.handleUserInput();
 		// update
 		snakeGame.update();
 

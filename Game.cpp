@@ -123,11 +123,12 @@ void Game::updateWorld() {
 
 void Game::update() {
 	pollEvent();
+	handleUserInput();
 
 	float timestep = 1.0f / player->getSpeed();
 
 	if (timeElabsed.asSeconds() >= timestep) {
-		player->moveSnake();
+		player->update();
 		updateWorld();
 		timeElabsed -= sf::seconds(timestep);
 		if (player->isLost()) {

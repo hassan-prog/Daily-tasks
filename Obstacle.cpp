@@ -7,7 +7,7 @@ void Obstacle::initObstacle() {
 	this->obstacle.setFillColor(sf::Color::Red);
 	this->obstacle.setOutlineColor(sf::Color::White);
 	this->obstacle.setOutlineThickness(2.0f);
-	this->obstacle.setOrigin(this->obstacle.getSize().x / 2, this->obstacle.getSize().y / 2);
+	//this->obstacle.setOrigin(this->obstacle.getSize().x / 2, this->obstacle.getSize().y / 2);
 }
 
 void Obstacle::initVars()
@@ -65,5 +65,5 @@ void Obstacle::updatePosition(float deltaTime) {
 }
 
 void Obstacle::render(sf::RenderWindow& window) {
-	window.draw(obstacle);
+	window.draw(this->obstacle);
 }
