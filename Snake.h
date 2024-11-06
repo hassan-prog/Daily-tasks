@@ -66,5 +66,5 @@ public:
 
 	void moveSnake();
 	void update();
-	void render(sf::RenderWindow window); // render the snake
+	void render(sf::RenderWindow& window); // render the snake
 };

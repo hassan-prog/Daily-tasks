@@ -89,8 +89,15 @@ void Snake::resetPosition() {
 	lost = false;
 }
 
-void Snake::cutSnake(int segments)
-{
+void Snake::cutSnake(int segments) {
+	for (int i = 0; i < segments; i++)
+		snakeBody.pop_back();
+
+	--lives;
+	if (!lives) {
+		lose();
+		return;
+	}
 }
 
 // player movement mechanics
@@ -99,10 +106,10 @@ void Snake::moveSnake() {
 		snakeBody[i].position = snakeBody[i - 1].position;
 	}
 	if (direction == Direction::Up) {
-		++snakeBody[0].position.y;
+		--snakeBody[0].position.y;
 	}
 	if (direction == Direction::Down) {
-		--snakeBody[0].position.y;
+		++snakeBody[0].position.y;
 	}
 	if (direction == Direction::Right) {
 		++snakeBody[0].position.x;
@@ -118,6 +125,24 @@ void Snake::update() {
 	if (direction == Direction::None) return;
 	moveSnake();
 	checkCollision();
+}
+
+// render the snake on the screen
+void Snake::render(sf::RenderWindow& window) {
+	if (snakeBody.empty()) return;
+
+	// draws the head of the snake
+	auto head = snakeBody.begin();
+	rectBody.setFillColor(headColor);
+	rectBody.setPosition(head->position.x * size, head->position.y * size);
+	window.draw(rectBody);
+
+	// draws the body of the snake; "iter" being each segment
+	rectBody.setFillColor(bodyColor);
+	for (auto iter = snakeBody.begin() + 1; iter == snakeBody.end(); ++iter) {
+		rectBody.setPosition(iter->position.x * size, iter->position.y * size);
+		window.draw(rectBody);
+	}
 }
 
 // extend snake tail

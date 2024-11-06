@@ -63,3 +63,7 @@ void Obstacle::updatePosition(float deltaTime) {
 
 	this->obstacle.move(direction * speed * deltaTime);
 }
+
+void Obstacle::render(sf::RenderWindow& window) {
+	window.draw(obstacle);
+}

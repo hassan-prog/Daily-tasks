@@ -18,5 +18,6 @@ public:
 	
 	const sf::RectangleShape& getObstacle() const;
 	void updatePosition(float deltaTime);
+	void render(sf::RenderWindow& window); // render the obstacle
 };
 

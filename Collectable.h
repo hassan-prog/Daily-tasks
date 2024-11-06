@@ -21,6 +21,8 @@ public:
 	void speed(Snake* snake);
 	void health(Snake* snake);
 	void score(Snake* snake);
+	void respawn();
+	void render(sf::RenderWindow& window); // render the collectable
 
 	Collectable();
 };

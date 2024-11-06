@@ -4,33 +4,33 @@
 
 //private functions
 void Collectable::initCollectable() {
-	this->generateRandomPosition(objPositionX, objPositionY);
-	this->shape.setRadius(40.0f);
-	this->shape.setPosition(sf::Vector2f(this->objPositionX, this->objPositionY));
-	this->shape.setFillColor(sf::Color::Yellow);
+	generateRandomPosition(objPositionX, objPositionY);
+	shape.setRadius(40.0f);
+	shape.setPosition(objPositionX, objPositionY);
+	shape.setFillColor(sf::Color::Yellow);
 }
 
 void Collectable::initVars() {
-	this->windowHeight = 720;
-	this->windowWidth = 1080;
-	this->objPositionX = 30;
-	this->objPositionY = 30;
+	windowHeight = 720;
+	windowWidth = 1080;
+	objPositionX = 30;
+	objPositionY = 30;
 }
 
-void Collectable::generateRandomPosition(float& x, float& y) {
-		x = rand() % (windowWidth - 2) + 1;
-		y = rand() % (windowHeight - 2) + 1;
+void Collectable::generateRandomPosition(float& maxX, float& maxY) {
+	maxX = rand() % ((windowWidth / 16) - 2) + 1;
+	maxY = rand() % ((windowHeight / 16) - 2) + 1;
 }
 
 //Constructors & Destructors
 Collectable::Collectable() {
-	this->initVars();
-	this->initCollectable();
+	initVars();
+	initCollectable();
 }
 
 const sf::CircleShape& Collectable::getShape() const
 {
-	return this->shape;
+	return shape;
 }
 
 //Functions
@@ -44,5 +44,14 @@ void Collectable::health(Snake* snake) {
 
 void Collectable::score(Snake* snake) {
 
+}
+
+void Collectable::respawn() {
+	generateRandomPosition(objPositionX, objPositionY);
+	shape.setPosition(objPositionX, objPositionY);
+}
+
+void Collectable::render(sf::RenderWindow& window) {
+	window.draw(shape);
 }
 

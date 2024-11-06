@@ -12,6 +12,11 @@ private:
 	sf::RenderWindow* snakeWindow;
 	sf::VideoMode videoMode;
 	sf::Clock clock;
+	sf::Time timeElabsed;
+
+	int GRID_HEIGHT;
+	int GRID_WIDTH;
+	int BLOCK_SIZE;
 
 	//Game objects
 	Obstacle* obstacle1;
@@ -23,6 +28,7 @@ private:
 
 	void initVariables();
 	void initWindow();
+	void loseIfOutOfBoundries();
 
 public:
 	Game();
@@ -30,10 +36,15 @@ public:
 
 	const bool isRunning() const;
 
+	const int getBlockSize() const;
+	const sf::Time getElabsed() const;
+
 	// Functions
 	void pollEvent();
 	void update();
-	void updateMousePositions();
+	void updateWorld();
 	void render();
+	void restartClock();
+	void handleUserInput();
 };
 
