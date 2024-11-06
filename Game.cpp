@@ -5,17 +5,18 @@
 // private functions
 void Game::initVariables() {
 	this->snakeWindow = nullptr;
+	this->videoMode.height = 720;
+	this->videoMode.width = 1080;
+
 	this->collectable1 = new Collectable();
 	this->obstacle1 = new Obstacle();
 	this->player = new Snake();
 }
 
 void Game::initWindow() {
-	this->videoMode.height = 720;
-	this->videoMode.width = 1080;
+	this->snakeWindow->setFramerateLimit(60); // cap 60 FPS
 
 	this->snakeWindow = new sf::RenderWindow(this->videoMode, "sssss-Snake", sf::Style::Titlebar | sf::Style::Close);
-
 }
 
 // Constructors & Destructors
