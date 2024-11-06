@@ -1,4 +1,5 @@
 #include "Snake.h"
+#include <iostream>
 
 //private functions
 void Snake::initVars() {
@@ -145,6 +146,7 @@ void Snake::render(sf::RenderWindow& window) {
 
 // extend snake tail
 void Snake::grow() {
+	std::cout << "IM GROWINGGGGGG\n";
 	if (snakeBody.empty())
 		return;
 	// last snake segment

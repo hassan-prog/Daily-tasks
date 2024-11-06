@@ -5,8 +5,8 @@
 // private functions
 void Game::initVariables() {
 	snakeWindow = nullptr;
-	GRID_HEIGHT = 720;
-	GRID_WIDTH = 1080;
+	GRID_HEIGHT = 600;
+	GRID_WIDTH = 800;
 	BLOCK_SIZE = 16;
 	videoMode.height = GRID_HEIGHT;
 	videoMode.width = GRID_WIDTH;
@@ -111,7 +111,8 @@ void Game::updateWorld() {
 
 		- gets mouse position relative to the window
 	*/
-	if ((*player).getPosition() == static_cast<sf::Vector2i>(collectable1->getShape().getPosition())) {
+	if ((*player).getPosition() == (*collectable1).item) {
+		std::cout << "IM GROWINGGGGGG\n";
 		player->grow();
 		player->increaseScore();
 		collectable1->respawn();

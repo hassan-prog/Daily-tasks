@@ -6,18 +6,20 @@
 void Collectable::initCollectable() {
 	generateRandomPosition(objPositionX, objPositionY);
 	shape.setRadius(8.0f);
-	shape.setPosition(objPositionX, objPositionY);
+	shape.setPosition(item.x * blockSize, item.y * blockSize);
 	shape.setFillColor(sf::Color::Yellow);
 }
 
 void Collectable::initVars() {
-	windowHeight = 720;
-	windowWidth = 1080;
+	windowHeight = 600;
+	windowWidth = 800;
+	blockSize = 16;
 }
 
-void Collectable::generateRandomPosition(float& maxX, float& maxY) {
-	maxX = static_cast<float>(rand() % (windowWidth - 8));
-	maxY = static_cast<float>(rand() % (windowHeight - 8));
+void Collectable::generateRandomPosition(int& maxX, int& maxY) {
+	maxX = (windowWidth / blockSize) - 2;
+	maxY = (windowHeight / blockSize) - 2;
+	item = sf::Vector2i(rand() % maxX + 1, rand() % maxY + 1);
 }
 
 //Constructors & Destructors
@@ -46,7 +48,7 @@ void Collectable::score(Snake* snake) {
 
 void Collectable::respawn() {
 	generateRandomPosition(objPositionX, objPositionY);
-	shape.setPosition(objPositionX, objPositionY);
+	shape.setPosition(item.x * blockSize, item.y * blockSize);
 }
 
 void Collectable::render(sf::RenderWindow& window) {

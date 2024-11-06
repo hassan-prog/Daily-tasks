@@ -9,8 +9,8 @@ private:
 protected:
 	Snake* player;
 	
-	float objPositionX;
-	float objPositionY;
+	int objPositionX;
+	int objPositionY;
 
 	virtual bool checkPlayerPos();
 

@@ -6,17 +6,20 @@
 class Collectable : private GameObject
 {
 private:
-	int windowHeight = 0;
-	int windowWidth = 0;
+	int windowHeight;
+	int windowWidth;
+	int blockSize;
 
 	sf::CircleShape shape;
 
 	//private functions
-	void generateRandomPosition(float& x, float& y);
+	void generateRandomPosition(int& x, int& y);
 	void initCollectable();
 	void initVars();
 
 public:
+	sf::Vector2i item;
+
 	const sf::CircleShape& getShape() const;
 	void speed(Snake* snake);
 	void health(Snake* snake);
