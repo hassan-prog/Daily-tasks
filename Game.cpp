@@ -10,13 +10,13 @@ void Game::initVariables() {
 
 	this->collectable1 = new Collectable();
 	this->obstacle1 = new Obstacle();
-	this->player = new Snake();
+	this->player = new Snake(16);
 }
 
 void Game::initWindow() {
-	this->snakeWindow->setFramerateLimit(60); // cap 60 FPS
-
 	this->snakeWindow = new sf::RenderWindow(this->videoMode, "sssss-Snake", sf::Style::Titlebar | sf::Style::Close);
+
+	this->snakeWindow->setFramerateLimit(60); // cap 60 FPS
 }
 
 // Constructors & Destructors
@@ -75,7 +75,7 @@ void Game::update() {
 	this->updateMousePositions();
 
 	// Calculate delta time for smooth movement
-	float deltaTime = clock.restart().asSeconds();
+	float deltaTime = clock.restart().asMilliseconds();
 
 	this->obstacle1->updatePosition(deltaTime);
 }
@@ -88,9 +88,9 @@ void Game::render() {
 	*/
 	this->snakeWindow->clear(sf::Color(23, 23, 23, 255));
 
-	for(const auto& part: player->getPlayer()){
+	/*for(const auto& part: player->getPlayer()){
 		snakeWindow->draw(part);
-	}
+	}*/
 	this->snakeWindow->draw(collectable1->getShape());
 	this->snakeWindow->draw(obstacle1->getObstacle());
 	// Draw stuff here
