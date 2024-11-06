@@ -7,6 +7,7 @@ void Game::initVariables() {
 	this->snakeWindow = nullptr;
 	this->collectable1 = new Collectable();
 	this->obstacle1 = new Obstacle();
+	this->player = new Snake();
 }
 
 void Game::initWindow() {
@@ -27,6 +28,7 @@ Game::~Game() {
 	delete this->snakeWindow;
 	delete this->collectable1;
 	delete this->obstacle1;
+	delete this->player;
 }
 
 //Accessors
@@ -83,8 +85,11 @@ void Game::render() {
 		- Render objects in window
 		- Display the frame in window
 	*/
-	this->snakeWindow->clear(sf::Color(75, 175, 82, 155));
+	this->snakeWindow->clear(sf::Color(23, 23, 23, 255));
 
+	for(const auto& part: player->getPlayer()){
+		snakeWindow->draw(part);
+	}
 	this->snakeWindow->draw(collectable1->getShape());
 	this->snakeWindow->draw(obstacle1->getObstacle());
 	// Draw stuff here

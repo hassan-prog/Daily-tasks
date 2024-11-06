@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Obstacle.h"
 #include "Collectable.h"
+#include "Snake.h"
 
 class Game
 {
@@ -15,6 +16,7 @@ private:
 	//Game objects
 	Obstacle* obstacle1;
 	Collectable* collectable1;
+	Snake* player;
 
 	//Mouse positions
 	sf::Vector2i windowMousePos;
