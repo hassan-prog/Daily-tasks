@@ -6,25 +6,25 @@
 void Collectable::initCollectable(sf::Color color) {
 	this->collectableColor = color;
 	generateRandomPosition(objPositionX, objPositionY);
-	shape.setRadius(8.0f);
-	shape.setPosition(item.x * blockSize, item.y * blockSize);
+	shape.setRadius(this->blockSize / 2);
+	shape.setPosition(item.x * this->blockSize, item.y * this->blockSize);
 	shape.setFillColor(collectableColor);
 }
 
 void Collectable::initVars() {
 	windowHeight = 600;
 	windowWidth = 800;
-	blockSize = 16;
 }
 
 void Collectable::generateRandomPosition(int& maxX, int& maxY) {
-	maxX = (windowWidth / blockSize) - 2;
-	maxY = (windowHeight / blockSize) - 2;
+	maxX = (windowWidth / this->blockSize) - 2;
+	maxY = (windowHeight / this->blockSize) - 2;
 	item = sf::Vector2i(rand() % maxX + 1, rand() % maxY + 1);
 }
 
 //Constructors & Destructors
-Collectable::Collectable(sf::Color color) {
+Collectable::Collectable(sf::Color color, int blockSize) {
+	this->blockSize = blockSize;
 	initVars();
 	initCollectable(color);
 }
@@ -35,6 +35,7 @@ const sf::CircleShape& Collectable::getShape() const
 }
 
 //Functions
+
 void Collectable::slowPlayerSpeed(Snake& player) {
 	if (player.getSpeed() <= 10) return;
 	player.decreaseSpeedTemporary(8.0f);
@@ -93,13 +94,9 @@ void Collectable::extendPlayer(Snake& player, Direction& direction) {
 	}
 }
 
-void Collectable::score(Snake* snake) {
-
-}
-
 void Collectable::respawn() {
 	generateRandomPosition(objPositionX, objPositionY);
-	shape.setPosition(item.x * blockSize, item.y * blockSize);
+	shape.setPosition(item.x * this->blockSize, item.y * this->blockSize);
 }
 
 void Collectable::render(sf::RenderWindow& window) {

@@ -54,6 +54,8 @@ bool Snake::isLost() { return lost; }
 void Snake::lose() { lost = true; }
 void Snake::toggleLost() { lost = !lost; }
 void Snake::increaseScore() { score += 10; }
+void Snake::increaseScoreByHundred() { std::cout << "INCREASING SCORE BY 100\n"; score += 100; }
+
 
 // functions
 void Snake::resetPosition() {

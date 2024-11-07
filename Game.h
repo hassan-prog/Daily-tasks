@@ -13,6 +13,7 @@ private:
 	sf::VideoMode videoMode;
 	sf::Clock clock;
 	sf::Time timeElabsed;
+	float deltaTime;
 
 	int GRID_HEIGHT;
 	int GRID_WIDTH;
@@ -24,8 +25,14 @@ private:
 
 	Collectable* slowSpeedCollectable;
 	sf::Color slowSpeedCollectableColor;
+	bool slowSpeedCollectableIsVisible;
 
-	//Collectable* extendPlayerCollectable;
+	Collectable* increaseScoreCollectable;
+	sf::Color increaseScoreCollectableColor;
+	float increaseScoreByHundredSpawnTimer;          // Counts up to 15 seconds
+	float increaseScoreByHundredActiveDurationTimer; // Counts down from 5 seconds when spawned
+	bool increaseScoreByHundredIsVisible;            // Tracks if the item is currently active
+
 	Obstacle* obstacle1;
 	Snake* player;
 

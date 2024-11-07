@@ -10,12 +10,21 @@ void Game::initVariables() {
 	BLOCK_SIZE = 16;
 	videoMode.height = GRID_HEIGHT;
 	videoMode.width = GRID_WIDTH;
+
 	extendPlayerCollectableColor = sf::Color::Green;
+
 	slowSpeedCollectableColor = sf::Color::Cyan;
+	slowSpeedCollectableIsVisible = false;
+
+	increaseScoreCollectableColor = sf::Color::Magenta;
+	increaseScoreByHundredSpawnTimer = 0.0f;          // Counts up to 15 seconds
+	increaseScoreByHundredActiveDurationTimer = 0.0f; // Counts down from 5 seconds when spawned
+	increaseScoreByHundredIsVisible = false;            // Tracks if the item is currently active
 
 	// when i move these 4 vars into the constructor it doesn't render the colors nor the player
-	extendPlayerCollectable = new Collectable(extendPlayerCollectableColor);
-	slowSpeedCollectable = new Collectable(slowSpeedCollectableColor);
+	extendPlayerCollectable = new Collectable(extendPlayerCollectableColor, 16);
+	slowSpeedCollectable = new Collectable(slowSpeedCollectableColor, 16);
+	increaseScoreCollectable = new Collectable(increaseScoreCollectableColor, 16);
 	obstacle1 = new Obstacle();
 	player = new Snake(BLOCK_SIZE);
 }
@@ -48,6 +57,7 @@ Game::~Game() {
 	delete snakeWindow;
 	delete extendPlayerCollectable;
 	delete slowSpeedCollectable;
+	delete increaseScoreCollectable;
 	delete obstacle1;
 	delete player;
 }
@@ -112,22 +122,61 @@ void Game::pollEvent() {
 
 void Game::updateWorld() {
 	/*
-		@ returns void
-
-		- gets mouse position relative to the window
+		- Collectable to grow the player
+		- Collectable to slow the speed of the player without making it grow
+		- Collectable to increase the score by 100 instead of normally 10
 	*/
 	if ((*player).getPosition() == (*extendPlayerCollectable).item) {
-		extendPlayerCollectable->extendPlayer(*player, player->getDirection());
 		player->increaseScore();
+		extendPlayerCollectable->extendPlayer(*player, player->getDirection());
 		extendPlayerCollectable->respawn();
 	};
 
-	if ((*player).getPosition() == (*slowSpeedCollectable).item) {
-		slowSpeedCollectable->extendPlayer(*player, player->getDirection());
-		slowSpeedCollectable->slowPlayerSpeed(*player);
-		player->increaseScore();
-		slowSpeedCollectable->respawn();
-	};
+	if (player->getScore() % 50 == 0 && player->getScore() != 0) {
+		slowSpeedCollectableIsVisible = true;
+	}
+	else {
+		slowSpeedCollectableIsVisible = false;
+	}
+	if (slowSpeedCollectableIsVisible) {
+		if ((*player).getPosition() == (*slowSpeedCollectable).item) {
+			player->increaseScore();
+			slowSpeedCollectable->slowPlayerSpeed(*player);
+			slowSpeedCollectable->respawn();
+			slowSpeedCollectableIsVisible = false;
+		};
+	}
+
+
+	if (increaseScoreByHundredIsVisible) {
+		// counts down from 5 to despawn the collectable
+		increaseScoreByHundredActiveDurationTimer -= deltaTime;
+
+		// if the player touches the collectable make it disappear
+		if ((*player).getPosition() == (*increaseScoreCollectable).item) {
+			increaseScoreCollectable->respawn();
+			player->increaseScoreByHundred();
+			increaseScoreCollectable->extendPlayer(*player, player->getDirection());
+			increaseScoreByHundredActiveDurationTimer = 0.0f;
+			increaseScoreByHundredSpawnTimer = 0.0f;
+			increaseScoreByHundredIsVisible = false;
+		};
+
+		if (increaseScoreByHundredActiveDurationTimer <= 0.0f) {
+			increaseScoreByHundredIsVisible = false;
+			increaseScoreByHundredSpawnTimer = 0.0f;
+		}
+	}
+	else {
+		// counts up to 15 seconds to spawn the collectable
+		increaseScoreByHundredSpawnTimer += deltaTime;
+
+		if (increaseScoreByHundredSpawnTimer >= 15.0f) {
+			increaseScoreCollectable->respawn();
+			increaseScoreByHundredActiveDurationTimer = 5.0f;
+			increaseScoreByHundredIsVisible = true;
+		}
+	}
 
 	this->loseIfOutOfBoundries();
 
@@ -138,7 +187,7 @@ void Game::update() {
 	handleUserInput();
 
 	float timestep = 1.0f / player->getSpeed();
-	float deltaTime = static_cast<float>(timeElabsed.asSeconds());
+	deltaTime = static_cast<float>(timeElabsed.asSeconds());
 
 	if (timeElabsed.asSeconds() >= timestep) {
 		player->update(deltaTime);
@@ -163,8 +212,11 @@ void Game::render() {
 
 	player->render(*snakeWindow);
 	extendPlayerCollectable->render(*snakeWindow);
-	if (player->getScore() % 50 == 0 && player->getScore() != 0) {
+	if (slowSpeedCollectableIsVisible) {
 		slowSpeedCollectable->render(*snakeWindow);
+	}
+	if (increaseScoreByHundredIsVisible) {
+		increaseScoreCollectable->render(*snakeWindow);
 	}
 	obstacle1->render(*snakeWindow);
 	// Draw stuff here

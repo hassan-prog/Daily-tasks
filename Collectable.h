@@ -24,10 +24,9 @@ public:
 	const sf::CircleShape& getShape() const;
 	void slowPlayerSpeed(Snake& snakeBody);
 	void extendPlayer(Snake& snakeBody, Direction& direction);
-	void score(Snake* snake);
 	void respawn();
 	void render(sf::RenderWindow& window); // render the collectable
 
-	Collectable(sf::Color color);
+	Collectable(sf::Color color, int blockSize);
 };
 

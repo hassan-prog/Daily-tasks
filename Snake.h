@@ -50,13 +50,15 @@ public:
 	// getters and setters
 	SnakeContainer& getSnakeBody();
 	Direction& getDirection();
+	sf::Vector2i getPosition();
+
 	void setDirection(Direction dir);
 	void increaseSpeed();
 	float getSpeed();
 	int getLives();
 	int getScore();
-	sf::Vector2i getPosition();
 	void increaseScore();
+	void increaseScoreByHundred();
 	bool isLost();
 
 	// functions
