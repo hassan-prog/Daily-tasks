@@ -4,7 +4,7 @@
 //private functions
 void Snake::initVars() {
 	score = 0;
-	speed = 11;
+	speed = 10;
 	lives = 3;
 	lost = false;
 	cooldownTimer = 0.0f;
