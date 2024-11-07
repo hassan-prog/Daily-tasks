@@ -18,6 +18,9 @@ private:
 	int GRID_HEIGHT;
 	int GRID_WIDTH;
 	int BLOCK_SIZE;
+	sf::Text healthText;
+	sf::Text scoreText;
+	sf::Font font;
 
 	// Game objects
 	Snake* player;
@@ -38,36 +41,38 @@ private:
 
 	// Obstacles
 	Obstacle* bigObstacleHorizontal;
-	float bigObstacleHorizontalSpawnTimer;
 	bool bigObstacleHorizontalIsVisible;
 
 	Obstacle* bigObstacleVertical;
-	float bigObstacleVerticalSpawnTimer;
 	bool bigObstacleVerticalIsVisible;
 
-	//Mouse positions
-	sf::Vector2i windowMousePos;
+	bool hasCollidedWithObstacle;
+	
+	Obstacle* loseHealthObstacle;
 
 	void initVariables();
 	void initWindow();
 	void loseIfOutOfBoundries();
+	void initUI(const Snake& player);
+
+	const sf::Time getElabsed() const;
+
+	// Functions
+	void updateUI(const Snake& player);
+	void pollEvent();
+	void updateWorld();
+	void restartGame();
+	void handleUserInput();
 
 public:
 	Game();
 	~Game();
 
+	const int getBlockSize() const;
 	const bool isRunning() const;
 
-	const int getBlockSize() const;
-	const sf::Time getElabsed() const;
-
-	// Functions
-	void pollEvent();
-	void update();
-	void updateWorld();
-	void render();
 	void restartClock();
-	void handleUserInput();
-	void restartGame();
+	void update();
+	void render();
 };
 

@@ -3,6 +3,12 @@
 
 //private functions
 void Snake::initVars() {
+	score = 0;
+	speed = 11;
+	lives = 3;
+	lost = false;
+	cooldownTimer = 0.0f;
+
 	snakeSize = sf::Vector2f(20.0f, 20.0f);
 
 	//snake head variables
@@ -18,7 +24,7 @@ void Snake::checkCollision() {
 	if (snakeBody.size() < 5) return;
 	SnakeSegment& head = snakeBody.front();
 
-	// begin is of type Iterator
+	// begin() is of type Iterator
 	for (auto iter = snakeBody.begin() + 1; iter != snakeBody.end(); ++iter) {
 		if (iter->position == head.position) {
 			int segments = static_cast<int>(snakeBody.end() - iter);
@@ -45,8 +51,9 @@ SnakeContainer& Snake::getSnakeBody() { return snakeBody; }
 void Snake::setDirection(Direction dir) { direction = dir; }
 void Snake::increaseSpeed() { if (speed <= 25) speed += 0.5; }
 float Snake::getSpeed() { return speed; }
-int Snake::getLives() { return lives; }
-int Snake::getScore() { return score; }
+int Snake::getLives() const { return lives; }
+void Snake::increaseLives() { ++lives; }
+int Snake::getScore() const { return score; }
 sf::Vector2i Snake::getPosition() {
 	return (snakeBody.empty() ? sf::Vector2i(1, 1) : snakeBody.front().position);
 }
@@ -54,9 +61,22 @@ bool Snake::isLost() { return lost; }
 void Snake::lose() { lost = true; }
 void Snake::toggleLost() { lost = !lost; }
 void Snake::resetScore() { score = 0; }
+void Snake::resetCoolDown() { cooldownTimer = 0.0f; }
+void Snake::startCoolDown() { cooldownTimer = cooldownDuration; }
 void Snake::increaseScore() { score += 10; }
-void Snake::increaseScoreByHundred() { std::cout << "INCREASING SCORE BY 100\n"; score += 100; }
-
+void Snake::increaseScoreByHundred() { score += 100; }
+void Snake::loseLives() {
+	if (lives > 6) {
+		lives -= 3;
+		snakeBody.pop_back();
+		snakeBody.pop_back();
+		snakeBody.pop_back();
+	}
+	else {
+		lose();
+	}
+	std::cout << lives << '\n';
+}
 
 // functions
 void Snake::resetPosition() {
@@ -67,8 +87,8 @@ void Snake::resetPosition() {
 	snakeBody.push_back(SnakeSegment(5, 5));
 
 	setDirection(Direction::None);
+	resetScore();
 	speed = 11;
-	score = 0;
 	lives = 3;
 	lost = false;
 }
@@ -113,6 +133,11 @@ void Snake::decreaseSpeedTemporary(float duration) {
 
 // updates the state of the snake for a fixed time-step
 void Snake::update(float deltaTime) {
+	if (cooldownTimer > 0) {
+		cooldownTimer -= deltaTime;
+		return;
+	}
+
 	if (snakeBody.empty() || direction == Direction::None) return;
 
 	if (speedReductionTimer > 0.0f) {

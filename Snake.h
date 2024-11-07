@@ -11,12 +11,14 @@ using SnakeContainer = std::vector<SnakeSegment>;
 
 enum class Direction { None, Up, Down, Left, Right };
 
-class Snake
-{
+class Snake {
 private:
 	// this is used to store the original speed value in the decreaseSpeed()
 	float originalSpeed;
-	float speedReductionTimer = 0.0f;  // Duration left for reduced speed
+	float speedReductionTimer = 0.0f;  
+	
+	float cooldownTimer;         // Tracks time remaining in cooldown
+	const float cooldownDuration = 2.0f;
 
 	float speed;
 	int lives;
@@ -55,8 +57,10 @@ public:
 	void setDirection(Direction dir);
 	void increaseSpeed();
 	float getSpeed();
-	int getLives();
-	int getScore();
+	int getLives() const;
+	void increaseLives();
+	void loseLives();
+	int getScore() const;
 	void increaseScore();
 	void increaseScoreByHundred();
 	bool isLost();
@@ -65,6 +69,8 @@ public:
 	void lose(); // handle losing
 	void toggleLost();
 	void resetScore();
+	void resetCoolDown();
+	void startCoolDown();
 
 	void resetPosition(); // reset to the original position
 	void cutSnake(int segments);

@@ -1,16 +1,19 @@
 #include "Obstacle.h"
 
 // Private functions
-void Obstacle::initObstacle(sf::Vector2f startPosition, sf::Vector2f endPosition) {
+void Obstacle::initObstacle(
+	sf::Vector2f startPosition, sf::Vector2f endPosition,
+	sf::Color color, sf::Vector2f size, int speed
+) 
+{
 	this->startPosition = startPosition;
 	this->endPosition = endPosition;
 
 	obstacle.setPosition(startPosition);
-	obstacle.setSize(sf::Vector2f(80.0f, 80.0f));
-	obstacle.setFillColor(sf::Color(190, 59, 62));
+	obstacle.setSize(size);
+	obstacle.setFillColor(color);
 	obstacle.setOutlineColor(sf::Color::White);
 	obstacle.setOutlineThickness(1.0f);
-	//this->obstacle.setOrigin(this->obstacle.getSize().x / 2, this->obstacle.getSize().y / 2);
 }
 
 void Obstacle::initVars()
@@ -32,13 +35,31 @@ void Obstacle::initVars()
 
 
 // Constructors & Destructors
-Obstacle::Obstacle(sf::Vector2f startPosition, sf::Vector2f endPosition) {
+Obstacle::Obstacle(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color color, sf::Vector2f size, int speed) {
 	initVars();
-	initObstacle(startPosition, endPosition);
+	initObstacle(startPosition, endPosition, color, size, speed);
 }
 
 const sf::RectangleShape& Obstacle::getObstacle() const {
 	return obstacle;
+}
+
+bool Obstacle::checkCollision(const std::vector<SnakeSegment>& player, int segmentSize) const {
+	sf::FloatRect obstacleBounds = obstacle.getGlobalBounds();
+
+	for (const auto& segment : player) {
+		sf::FloatRect segmentBounds(
+			segment.position.x * segmentSize,
+			segment.position.y * segmentSize,
+			segmentSize,
+			segmentSize
+		);
+
+		if (obstacleBounds.intersects(segmentBounds)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void Obstacle::respawn() {

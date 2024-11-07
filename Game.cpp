@@ -11,6 +11,7 @@ void Game::initVariables() {
 	videoMode.height = GRID_HEIGHT;
 	videoMode.width = GRID_WIDTH;
 
+	// Collectables
 	extendPlayerCollectableColor = sf::Color::Green;
 
 	slowSpeedCollectableColor = sf::Color::Cyan;
@@ -21,25 +22,53 @@ void Game::initVariables() {
 	increaseScoreByHundredActiveDurationTimer = 0.0f; // Counts down from 5 seconds when spawned
 	increaseScoreByHundredIsVisible = false;            // Tracks if the item is currently visible
 
-	bigObstacleHorizontalSpawnTimer = 0.0f;
+	// Obstacles
 	bigObstacleHorizontalIsVisible = false;
-
-	bigObstacleVerticalSpawnTimer = 0.0f;
 	bigObstacleVerticalIsVisible = false;
 
-	// when i move these 4 vars into the constructor it doesn't render the colors nor the player
+	hasCollidedWithObstacle = false;
+
+	// when i move these vars into the constructor it doesn't render the colors nor the player
+	player = new Snake(BLOCK_SIZE);
+	// Collectables
 	extendPlayerCollectable = new Collectable(extendPlayerCollectableColor, 16);
 	slowSpeedCollectable = new Collectable(slowSpeedCollectableColor, 16);
 	increaseScoreCollectable = new Collectable(increaseScoreCollectableColor, 16);
-	bigObstacleHorizontal = new Obstacle(sf::Vector2f(360.0f, 0.0f), sf::Vector2f(360.0f, 520.0f));
-	bigObstacleVertical = new Obstacle(sf::Vector2f(720.0f, 260.0f), sf::Vector2f(0.0f, 260.0f));
-	player = new Snake(BLOCK_SIZE);
+
+	// Obstacles
+	bigObstacleHorizontal = new Obstacle(sf::Vector2f(360.0f, 0.0f), sf::Vector2f(360.0f, 520.0f),
+		sf::Color::Red, sf::Vector2f(80.0f, 80.0f), 20.0f);
+
+	bigObstacleVertical = new Obstacle(sf::Vector2f(720.0f, 260.0f), sf::Vector2f(0.0f, 260.0f),
+		sf::Color(190, 59, 62), sf::Vector2f(80.0f, 80.0f), 20.0f);
+
+	loseHealthObstacle = new Obstacle(sf::Vector2f(750.0f, 575.0f), sf::Vector2f(50.0f, 50.0f),
+		sf::Color::Yellow, sf::Vector2f(40.0f, 40.0f), 30.0f);
 }
 
 void Game::initWindow() {
 	snakeWindow = new sf::RenderWindow(videoMode, "sssss-Snake", sf::Style::Titlebar | sf::Style::Close);
-
 	snakeWindow->setFramerateLimit(60); // cap 60 FPS
+}
+
+void Game::initUI(const Snake& player) {
+	if (!font.loadFromFile("resources/Fonts/Poppins-Bold.ttf")) {
+		std::cerr << "Error loading font\n";
+	}
+
+	// Initialize the score text
+	scoreText.setFont(font);
+	scoreText.setCharacterSize(24); // Size of the text
+	scoreText.setFillColor(sf::Color::White);
+	scoreText.setPosition(10.f, 10.f); // Position at the top-left corner
+	scoreText.setString("Score: " + std::to_string(player.getScore()));
+
+	// Initialize the health text
+	healthText.setString("Health: " + std::to_string(player.getLives()));
+	healthText.setFont(font);
+	healthText.setCharacterSize(24);
+	healthText.setFillColor(sf::Color::White);
+	healthText.setPosition(10.f, 40.f); // Positioned below the score
 }
 
 void Game::loseIfOutOfBoundries() {
@@ -58,6 +87,7 @@ void Game::loseIfOutOfBoundries() {
 Game::Game() {
 	this->initVariables();
 	this->initWindow();
+	this->initUI(*player);
 }
 
 Game::~Game() {
@@ -67,6 +97,7 @@ Game::~Game() {
 	delete increaseScoreCollectable;
 	delete bigObstacleHorizontal;
 	delete bigObstacleVertical;
+	delete loseHealthObstacle;
 	delete player;
 }
 
@@ -98,6 +129,8 @@ void Game::handleUserInput() {
 void Game::restartGame() {
 	player->resetPosition();
 	player->resetScore();
+	player->resetCoolDown();
+	updateUI(*player);
 
 	extendPlayerCollectable->respawn();
 	slowSpeedCollectableIsVisible = false;
@@ -106,13 +139,13 @@ void Game::restartGame() {
 	increaseScoreByHundredSpawnTimer = 0.0f;
 	increaseScoreByHundredActiveDurationTimer = 0.0f;
 
-	bigObstacleHorizontalSpawnTimer = 0.0f;
 	bigObstacleHorizontalIsVisible = false;
 	bigObstacleHorizontal->respawn();
-	
-	bigObstacleVerticalSpawnTimer = 0.0f;
+
 	bigObstacleVerticalIsVisible = false;
 	bigObstacleVertical->respawn();
+
+	loseHealthObstacle->respawn();
 
 	timeElabsed.Zero;
 }
@@ -128,6 +161,12 @@ const int Game::getBlockSize() const {
 
 const sf::Time Game::getElabsed() const {
 	return timeElabsed;
+}
+
+void Game::updateUI(const Snake& player) {
+	scoreText.setString("Score: " + std::to_string(player.getScore()));
+
+	healthText.setString("Health: " + std::to_string(player.getLives()));
 }
 
 void Game::pollEvent() {
@@ -159,6 +198,7 @@ void Game::updateWorld() {
 	if ((*player).getPosition() == (*extendPlayerCollectable).item) {
 		player->increaseScore();
 		extendPlayerCollectable->extendPlayer(*player, player->getDirection());
+		updateUI(*player);
 		extendPlayerCollectable->respawn();
 	};
 
@@ -172,6 +212,7 @@ void Game::updateWorld() {
 		if ((*player).getPosition() == (*slowSpeedCollectable).item) {
 			player->increaseScore();
 			slowSpeedCollectable->slowPlayerSpeed(*player);
+			updateUI(*player);
 			slowSpeedCollectable->respawn();
 			slowSpeedCollectableIsVisible = false;
 		};
@@ -187,6 +228,7 @@ void Game::updateWorld() {
 			increaseScoreCollectable->respawn();
 			player->increaseScoreByHundred();
 			increaseScoreCollectable->extendPlayer(*player, player->getDirection());
+			updateUI(*player);
 			increaseScoreByHundredActiveDurationTimer = 0.0f;
 			increaseScoreByHundredSpawnTimer = 0.0f;
 			increaseScoreByHundredIsVisible = false;
@@ -208,21 +250,33 @@ void Game::updateWorld() {
 		}
 	}
 
-
 	/*
 		- Big obstacles that appears once the player gets different scores
 		the purpose of it is just a distraction
 	*/
 
 	// Horizontal obstacle
-	if (player->getScore() >= 500) {
+	if (player->getScore() >= 300) {
 		bigObstacleHorizontalIsVisible = true;
 	}
-	if (player->getScore() >= 800) {
+	// Vertical obstacle
+	if (player->getScore() >= 500) {
 		bigObstacleVerticalIsVisible = true;
 	}
-	this->loseIfOutOfBoundries();
 
+	// Lose health obstacle
+	if (loseHealthObstacle->checkCollision(player->getSnakeBody(), BLOCK_SIZE)) {
+		if (!hasCollidedWithObstacle) {
+			player->loseLives();
+			updateUI(*player);
+			player->startCoolDown();
+			hasCollidedWithObstacle = true;
+		}
+	} else {
+		hasCollidedWithObstacle = false;
+	}
+
+	this->loseIfOutOfBoundries();
 }
 
 void Game::update() {
@@ -235,6 +289,7 @@ void Game::update() {
 
 	if (timeElabsed.asSeconds() >= timestep) {
 		player->update(deltaTime);
+		updateUI(*player);
 		updateWorld();
 		timeElabsed -= sf::seconds(timestep);
 		if (player->isLost()) {
@@ -244,6 +299,7 @@ void Game::update() {
 
 	this->bigObstacleHorizontal->updatePosition(deltaTime);
 	this->bigObstacleVertical->updatePosition(deltaTime);
+	this->loseHealthObstacle->updatePosition(deltaTime);
 }
 
 void Game::render() {
@@ -253,6 +309,7 @@ void Game::render() {
 		- Display the frame in window
 	*/
 	this->snakeWindow->clear(sf::Color(23, 23, 23, 255));
+
 
 	player->render(*snakeWindow);
 	extendPlayerCollectable->render(*snakeWindow);
@@ -269,6 +326,9 @@ void Game::render() {
 	if (bigObstacleVerticalIsVisible) {
 		bigObstacleVertical->render(*snakeWindow);
 	}
+	loseHealthObstacle->render(*snakeWindow);
+	snakeWindow->draw(scoreText);
+	snakeWindow->draw(healthText);
 	// Draw stuff here
 
 	this->snakeWindow->display();

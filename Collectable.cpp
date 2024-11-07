@@ -90,6 +90,7 @@ void Collectable::extendPlayer(Snake& player, Direction& direction) {
 		}
 
 	}
+	player.increaseLives();
 	player.increaseSpeed();
 }
 
