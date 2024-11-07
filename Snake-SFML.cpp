@@ -50,19 +50,10 @@ void update(float deltaTime);
 void render(sf::RenderWindow& window);
 
 // Collectable-related functions
-void initializeObstacle(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color color, sf::Vector2f size, int speed);
-void initializeCollectable(sf::Color color, int blockSize);
 void generateRandomPosition(int& maxX, int& maxY, sf::Vector2i& item);
-void slowPlayerSpeed(SnakeContainer& snakeBody);
-void extendPlayer(SnakeContainer& snakeBody, Direction direction);
-void respawnCollectable();
-const sf::CircleShape& getCollectableShape();
 
 // Obstacle-related functions
 void initVariables();
-void initObstacle(int index, sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color color, sf::Vector2f size, float speed);
-
-
 
 float speed = 10, speedReductionTimer = 0.0f, cooldownDuration = 2.0f, cooldownTimer = 0.0f, originalSpeed = 0.0f;
 int lives = 3, score = 0, size = 16;
@@ -219,38 +210,35 @@ void initObstacle()
 	bigObstacleVerticalShape.setOutlineThickness(1.0f);
 	loseHealthObstacleShape.setOutlineThickness(1.0f);
 }
+
 void initObstacleVars() {
-	{
-		speed = 20.0f;
+	speed = 20.0f;
 
-		// setting the direction
-		obs1Direction = bigObstacleHorizontalendPosition - bigObstacleHorizontalstartPosition;
-		obs2Direction = bigObstacleVerticalendPosition - bigObstacleVerticalstartPosition;
-		obs3Direction = loseHealthObstacleendPosition - loseHealthObstaclestartPosition;
+	// setting the direction
+	obs1Direction = bigObstacleHorizontalendPosition - bigObstacleHorizontalstartPosition;
+	obs2Direction = bigObstacleVerticalendPosition - bigObstacleVerticalstartPosition;
+	obs3Direction = loseHealthObstacleendPosition - loseHealthObstaclestartPosition;
 
-		/*
-			- control movement speed independently of the vector’s length
-			- Without normalization, the speed would vary depending on
-			the distance between startPosition and endPosition.
-		*/
-		float length1 = std::sqrt(obs1Direction.x * obs1Direction.x + obs1Direction.y * obs1Direction.y);
-		float length2 = std::sqrt(obs2Direction.x * obs2Direction.x + obs2Direction.y * obs2Direction.y);
-		float length3 = std::sqrt(obs3Direction.x * obs3Direction.x + obs3Direction.y * obs3Direction.y);
-		if (length1 != 0)
-			obs1Direction /= length1;
-		if (length2 != 0)
-			obs2Direction /= length2;
-		if (length3 != 0)
-			obs3Direction /= length3;
-	}
+	/*
+		- control movement speed independently of the vector’s length
+		- Without normalization, the speed would vary depending on
+		the distance between startPosition and endPosition.
+	*/
+	float length1 = std::sqrt(obs1Direction.x * obs1Direction.x + obs1Direction.y * obs1Direction.y);
+	float length2 = std::sqrt(obs2Direction.x * obs2Direction.x + obs2Direction.y * obs2Direction.y);
+	float length3 = std::sqrt(obs3Direction.x * obs3Direction.x + obs3Direction.y * obs3Direction.y);
+	if (length1 != 0)
+		obs1Direction /= length1;
+	if (length2 != 0)
+		obs2Direction /= length2;
+	if (length3 != 0)
+		obs3Direction /= length3;
 }
 
 
-void initializeObstacle(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color color, sf::Vector2f size, int speed) {
-	{
-		initObstacleVars();
-		initObstacle();
-	}
+void initializeObstacle() {
+	initObstacleVars();
+	initObstacle();
 }
 
 bool checkCollision(const std::vector<SnakeSegment>& player, int segmentSize) {
@@ -270,39 +258,89 @@ bool checkCollision(const std::vector<SnakeSegment>& player, int segmentSize) {
 	}
 	return false;
 }
-void respawn() {
-	loseHealthObstacleShape.setPosition(loseHealthObstaclestartPosition);
-	loseHealthObstacleShape.setPosition(loseHealthObstaclestartPosition);
+void respawnObstacles() {
+	bigObstacleHorizontalShape.setPosition(bigObstacleHorizontalstartPosition);
+	bigObstacleVerticalShape.setPosition(bigObstacleVerticalstartPosition);
 	loseHealthObstacleShape.setPosition(loseHealthObstaclestartPosition);
 }
-//void updatePosition(float deltaTime) {
-//	sf::Vector2f currentPosition = obstacle.getPosition();
-//
-//	float distanceToStart = std::sqrt(
-//		std::pow(currentPosition.x - startPosition.x, 2) +
-//		std::pow(currentPosition.y - startPosition.y, 2));
-//
-//	float distanceToEnd = std::sqrt(
-//		std::pow(currentPosition.x - endPosition.x, 2) +
-//		std::pow(currentPosition.y - endPosition.y, 2));
-//
-//	if (distanceToEnd < 1.0f) {
-//		this->direction = startPosition - endPosition;
-//	}
-//	else if (distanceToStart < 1.0f) {
-//		this->direction = endPosition - startPosition;
-//	}
-//
-//	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-//	if (length != 0)
-//		direction /= length;
-//
-//	this->obstacle.move(direction * speed * deltaTime);
-//}
-//void render(sf::RenderWindow& window) {
-//	window.draw(this->obstacle);
-//} // render the obstacle
+void updatePosition(float deltaTime) {
+	sf::Vector2f currentHorizontalObstaclePosition = bigObstacleHorizontalShape.getPosition();
+	sf::Vector2f currentVerticalObstaclePosition = bigObstacleVerticalShape.getPosition();
+	sf::Vector2f currentloseHealthObstaclePosition = loseHealthObstacleShape.getPosition();
 
+	float horizontalDistanceToStart = std::sqrt(
+		std::pow(currentHorizontalObstaclePosition.x - bigObstacleHorizontalstartPosition.x, 2) +
+		std::pow(currentHorizontalObstaclePosition.y - bigObstacleHorizontalstartPosition.y, 2));
+
+	float horizontalDistanceToEnd = std::sqrt(
+		std::pow(currentHorizontalObstaclePosition.x - bigObstacleHorizontalendPosition.x, 2) +
+		std::pow(currentHorizontalObstaclePosition.y - bigObstacleHorizontalendPosition.y, 2));
+
+	float verticalDistanceToStart = std::sqrt(
+		std::pow(currentVerticalObstaclePosition.x - bigObstacleVerticalstartPosition.x, 2) +
+		std::pow(currentVerticalObstaclePosition.y - bigObstacleVerticalstartPosition.y, 2));
+
+	float verticalDistanceToEnd = std::sqrt(
+		std::pow(currentVerticalObstaclePosition.x - bigObstacleVerticalendPosition.x, 2) +
+		std::pow(currentVerticalObstaclePosition.y - bigObstacleVerticalendPosition.y, 2));
+
+	float loseHealthDistanceToStart = std::sqrt(
+		std::pow(currentloseHealthObstaclePosition.x - loseHealthObstaclestartPosition.x, 2) +
+		std::pow(currentloseHealthObstaclePosition.y - loseHealthObstaclestartPosition.y, 2));
+
+	float loseHealthDistanceToEnd = std::sqrt(
+		std::pow(currentloseHealthObstaclePosition.x - loseHealthObstacleendPosition.x, 2) +
+		std::pow(currentloseHealthObstaclePosition.y - loseHealthObstacleendPosition.y, 2));
+
+	if (horizontalDistanceToEnd < 1.0f) {
+		obs1Direction = bigObstacleHorizontalstartPosition - bigObstacleHorizontalendPosition;
+	}
+	else if (horizontalDistanceToStart < 1.0f) {
+		obs1Direction = bigObstacleHorizontalendPosition - bigObstacleHorizontalstartPosition;
+	}
+
+	if (verticalDistanceToEnd < 1.0f) {
+		obs2Direction = bigObstacleVerticalstartPosition - bigObstacleVerticalendPosition;
+	}
+	else if (verticalDistanceToStart < 1.0f) {
+		obs2Direction = bigObstacleVerticalendPosition - bigObstacleVerticalstartPosition;
+	}
+
+	if (loseHealthDistanceToEnd < 1.0f) {
+		obs3Direction = loseHealthObstaclestartPosition - loseHealthObstacleendPosition;
+	}
+	else if (loseHealthDistanceToStart < 1.0f) {
+		obs3Direction = loseHealthObstacleendPosition - loseHealthObstaclestartPosition;
+	}
+
+	float horizontalLength = std::sqrt(obs1Direction.x * obs1Direction.x + obs1Direction.y * obs1Direction.y);
+	float verticalLength = std::sqrt(obs2Direction.x * obs2Direction.x + obs2Direction.y * obs2Direction.y);
+	float loseHealthLength = std::sqrt(obs3Direction.x * obs3Direction.x + obs3Direction.y * obs3Direction.y);
+
+	if (horizontalLength != 0)
+		obs1Direction /= horizontalLength;
+
+	if (verticalLength != 0)
+		obs2Direction /= verticalLength;
+
+	if (loseHealthLength != 0)
+		obs3Direction /= loseHealthLength;
+
+	bigObstacleHorizontalShape.move(obs1Direction * bigObstacleSpeed * deltaTime);
+	bigObstacleVerticalShape.move(obs2Direction * bigObstacleSpeed * deltaTime);
+	loseHealthObstacleShape.move(obs3Direction * normalObstacleSpeed * deltaTime);
+}
+void renderbigObstacleHorizontalShape(sf::RenderWindow& window) {
+	window.draw(bigObstacleHorizontalShape);
+} // render the obstacle
+
+void renderbigObstacleVerticalShape(sf::RenderWindow& window) {
+	window.draw(bigObstacleVerticalShape);
+}
+
+void renderloseHealthObstacleShape(sf::RenderWindow& window) {
+	window.draw(loseHealthObstacleShape);
+}
 
 // DECLARING VARIABLES
 sf::Event userEvent;
@@ -316,15 +354,9 @@ int GRID_HEIGHT, GRID_WIDTH, BLOCK_SIZE;
 sf::Text healthText, scoreText;
 sf::Font font;
 
-// Collectables
-//Collectable* extendPlayerCollectable, * slowSpeedCollectable, * increaseScoreCollectable;
-//sf::Color extendPlayerCollectableColor, slowSpeedCollectableColor, increaseScoreCollectableColor;
-
 float increaseScoreByHundredSpawnTimer, increaseScoreByHundredActiveDurationTimer;          // Counts up to 15 seconds
 bool increaseScoreByHundredIsVisible, slowSpeedCollectableIsVisible;            // Tracks if the item is currently active
 
-// Obstacles
-//Obstacle* bigObstacleHorizontal, * bigObstacleVertical, * loseHealthObstacle;
 bool bigObstacleHorizontalIsVisible;
 
 bool bigObstacleVerticalIsVisible;
@@ -355,22 +387,6 @@ void initVariables() {
 	bigObstacleVerticalIsVisible = false;
 
 	hasCollidedWithObstacle = false;
-
-	// when i move these vars into the constructor it doesn't render the colors nor the player
-	// Collectables
-	/*extendPlayerCollectable = new Collectable(extendPlayerCollectableColor, 16);
-	slowSpeedCollectable = new Collectable(slowSpeedCollectableColor, 16);
-	increaseScoreCollectable = new Collectable(increaseScoreCollectableColor, 16);*/
-
-	// Obstacles
-	/*bigObstacleHorizontal = new Obstacle(sf::Vector2f(360.0f, 0.0f), sf::Vector2f(360.0f, 520.0f),
-		sf::Color::Red, sf::Vector2f(80.0f, 80.0f), 20.0f);
-
-	bigObstacleVertical = new Obstacle(sf::Vector2f(720.0f, 260.0f), sf::Vector2f(0.0f, 260.0f),
-		sf::Color(190, 59, 62), sf::Vector2f(80.0f, 80.0f), 20.0f);
-
-	loseHealthObstacle = new Obstacle(sf::Vector2f(750.0f, 575.0f), sf::Vector2f(50.0f, 50.0f),
-		sf::Color::Yellow, sf::Vector2f(40.0f, 40.0f), 30.0f);*/
 };
 
 void initWindow() {
@@ -414,21 +430,14 @@ void beginGame() {
 	rectBody.setSize(sf::Vector2f(BLOCK_SIZE - 1, BLOCK_SIZE - 1));
 	resetPosition();
 	initVariables();
+	initializeObstacle();
 	initWindow();
 	initUI();
 }
 
 void endGame() {
 	delete snakeWindow;
-	/*delete extendPlayerCollectable;
-	delete slowSpeedCollectable;
-	delete increaseScoreCollectable;*/
-	/*delete bigObstacleHorizontal;
-	delete bigObstacleVertical;
-	delete loseHealthObstacle;*/
 }
-
-const sf::Time getElabsed();
 
 // Functions
 void updateUI();
@@ -569,7 +578,7 @@ void updateWorld() {
 	}
 
 	// Lose health obstacle
-	/*if (loseHealthObstacle->checkCollision(getSnakeBody(), BLOCK_SIZE)) {
+	if (checkCollision(getSnakeBody(), BLOCK_SIZE)) {
 		if (!hasCollidedWithObstacle) {
 			loseLives();
 			updateUI();
@@ -580,7 +589,7 @@ void updateWorld() {
 	else {
 		hasCollidedWithObstacle = false;
 	}
-	*/
+
 
 	loseIfOutOfBoundries();
 }
@@ -598,12 +607,9 @@ void restartGame() {
 	increaseScoreByHundredActiveDurationTimer = 0.0f;
 
 	bigObstacleHorizontalIsVisible = false;
-	//bigObstacleHorizontal->respawn();
-
 	bigObstacleVerticalIsVisible = false;
-	//bigObstacleVertical->respawn();
+	respawnObstacles();
 
-	//loseHealthObstacle->respawn();
 
 	timeElabsed.Zero;
 }
@@ -741,9 +747,7 @@ void gameUpdate() {
 		}
 	};
 
-	//bigObstacleHorizontal->updatePosition(deltaTime);
-	//bigObstacleVertical->updatePosition(deltaTime);
-	//loseHealthObstacle->updatePosition(deltaTime);
+	updatePosition(deltaTime);
 }
 
 void snakeRender(sf::RenderWindow& window) {
@@ -795,13 +799,13 @@ void gameRender() {
 		renderCollectable(*snakeWindow, increaseScoreCollectableShape);
 	}
 
-	/*if (bigObstacleHorizontalIsVisible) {
-		bigObstacleHorizontal->render(*snakeWindow);
+	if (bigObstacleHorizontalIsVisible) {
+		renderbigObstacleHorizontalShape(*snakeWindow);
 	}
 	if (bigObstacleVerticalIsVisible) {
-		bigObstacleVertical->render(*snakeWindow);
+		renderbigObstacleVerticalShape(*snakeWindow);
 	}
-	loseHealthObstacle->render(*snakeWindow);*/
+	renderloseHealthObstacleShape(*snakeWindow);
 	snakeWindow->draw(scoreText);
 	snakeWindow->draw(healthText);
 	// Draw stuff here
