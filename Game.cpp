@@ -19,20 +19,27 @@ void Game::initVariables() {
 	increaseScoreCollectableColor = sf::Color::Magenta;
 	increaseScoreByHundredSpawnTimer = 0.0f;          // Counts up to 15 seconds
 	increaseScoreByHundredActiveDurationTimer = 0.0f; // Counts down from 5 seconds when spawned
-	increaseScoreByHundredIsVisible = false;            // Tracks if the item is currently active
+	increaseScoreByHundredIsVisible = false;            // Tracks if the item is currently visible
+
+	bigObstacleHorizontalSpawnTimer = 0.0f;
+	bigObstacleHorizontalIsVisible = false;
+
+	bigObstacleVerticalSpawnTimer = 0.0f;
+	bigObstacleVerticalIsVisible = false;
 
 	// when i move these 4 vars into the constructor it doesn't render the colors nor the player
 	extendPlayerCollectable = new Collectable(extendPlayerCollectableColor, 16);
 	slowSpeedCollectable = new Collectable(slowSpeedCollectableColor, 16);
 	increaseScoreCollectable = new Collectable(increaseScoreCollectableColor, 16);
-	obstacle1 = new Obstacle();
+	bigObstacleHorizontal = new Obstacle(sf::Vector2f(360.0f, 0.0f), sf::Vector2f(360.0f, 520.0f));
+	bigObstacleVertical = new Obstacle(sf::Vector2f(720.0f, 260.0f), sf::Vector2f(0.0f, 260.0f));
 	player = new Snake(BLOCK_SIZE);
 }
 
 void Game::initWindow() {
 	snakeWindow = new sf::RenderWindow(videoMode, "sssss-Snake", sf::Style::Titlebar | sf::Style::Close);
 
-	//snakeWindow->setFramerateLimit(60); // cap 60 FPS
+	snakeWindow->setFramerateLimit(60); // cap 60 FPS
 }
 
 void Game::loseIfOutOfBoundries() {
@@ -58,7 +65,8 @@ Game::~Game() {
 	delete extendPlayerCollectable;
 	delete slowSpeedCollectable;
 	delete increaseScoreCollectable;
-	delete obstacle1;
+	delete bigObstacleHorizontal;
+	delete bigObstacleVertical;
 	delete player;
 }
 
@@ -85,6 +93,28 @@ void Game::handleUserInput() {
 		&& player->getDirection() != Direction::Right) {
 		player->setDirection(Direction::Left);
 	}
+}
+
+void Game::restartGame() {
+	player->resetPosition();
+	player->resetScore();
+
+	extendPlayerCollectable->respawn();
+	slowSpeedCollectableIsVisible = false;
+
+	increaseScoreByHundredIsVisible = false;
+	increaseScoreByHundredSpawnTimer = 0.0f;
+	increaseScoreByHundredActiveDurationTimer = 0.0f;
+
+	bigObstacleHorizontalSpawnTimer = 0.0f;
+	bigObstacleHorizontalIsVisible = false;
+	bigObstacleHorizontal->respawn();
+	
+	bigObstacleVerticalSpawnTimer = 0.0f;
+	bigObstacleVerticalIsVisible = false;
+	bigObstacleVertical->respawn();
+
+	timeElabsed.Zero;
 }
 
 // Accessors
@@ -178,6 +208,19 @@ void Game::updateWorld() {
 		}
 	}
 
+
+	/*
+		- Big obstacles that appears once the player gets different scores
+		the purpose of it is just a distraction
+	*/
+
+	// Horizontal obstacle
+	if (player->getScore() >= 500) {
+		bigObstacleHorizontalIsVisible = true;
+	}
+	if (player->getScore() >= 800) {
+		bigObstacleVerticalIsVisible = true;
+	}
 	this->loseIfOutOfBoundries();
 
 }
@@ -187,6 +230,7 @@ void Game::update() {
 	handleUserInput();
 
 	float timestep = 1.0f / player->getSpeed();
+	// Calculate delta time for smooth movement
 	deltaTime = static_cast<float>(timeElabsed.asSeconds());
 
 	if (timeElabsed.asSeconds() >= timestep) {
@@ -194,12 +238,12 @@ void Game::update() {
 		updateWorld();
 		timeElabsed -= sf::seconds(timestep);
 		if (player->isLost()) {
-			player->resetPosition();
+			restartGame();
 		}
 	};
-	// Calculate delta time for smooth movement
 
-	this->obstacle1->updatePosition(deltaTime);
+	this->bigObstacleHorizontal->updatePosition(deltaTime);
+	this->bigObstacleVertical->updatePosition(deltaTime);
 }
 
 void Game::render() {
@@ -218,7 +262,13 @@ void Game::render() {
 	if (increaseScoreByHundredIsVisible) {
 		increaseScoreCollectable->render(*snakeWindow);
 	}
-	obstacle1->render(*snakeWindow);
+
+	if (bigObstacleHorizontalIsVisible) {
+		bigObstacleHorizontal->render(*snakeWindow);
+	}
+	if (bigObstacleVerticalIsVisible) {
+		bigObstacleVertical->render(*snakeWindow);
+	}
 	// Draw stuff here
 
 	this->snakeWindow->display();

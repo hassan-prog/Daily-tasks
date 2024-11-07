@@ -19,7 +19,10 @@ private:
 	int GRID_WIDTH;
 	int BLOCK_SIZE;
 
-	//Game objects
+	// Game objects
+	Snake* player;
+
+	// Collectables
 	Collectable* extendPlayerCollectable;
 	sf::Color extendPlayerCollectableColor;
 
@@ -33,9 +36,14 @@ private:
 	float increaseScoreByHundredActiveDurationTimer; // Counts down from 5 seconds when spawned
 	bool increaseScoreByHundredIsVisible;            // Tracks if the item is currently active
 
-	Obstacle* obstacle1;
-	Snake* player;
+	// Obstacles
+	Obstacle* bigObstacleHorizontal;
+	float bigObstacleHorizontalSpawnTimer;
+	bool bigObstacleHorizontalIsVisible;
 
+	Obstacle* bigObstacleVertical;
+	float bigObstacleVerticalSpawnTimer;
+	bool bigObstacleVerticalIsVisible;
 
 	//Mouse positions
 	sf::Vector2i windowMousePos;
@@ -60,5 +68,6 @@ public:
 	void render();
 	void restartClock();
 	void handleUserInput();
+	void restartGame();
 };
 

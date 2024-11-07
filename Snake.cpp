@@ -43,7 +43,7 @@ Snake::~Snake() { }
 Direction& Snake::getDirection() { return direction; }
 SnakeContainer& Snake::getSnakeBody() { return snakeBody; }
 void Snake::setDirection(Direction dir) { direction = dir; }
-void Snake::increaseSpeed() { this->speed += 0.5; }
+void Snake::increaseSpeed() { if (speed <= 25) speed += 0.5; }
 float Snake::getSpeed() { return speed; }
 int Snake::getLives() { return lives; }
 int Snake::getScore() { return score; }
@@ -53,6 +53,7 @@ sf::Vector2i Snake::getPosition() {
 bool Snake::isLost() { return lost; }
 void Snake::lose() { lost = true; }
 void Snake::toggleLost() { lost = !lost; }
+void Snake::resetScore() { score = 0; }
 void Snake::increaseScore() { score += 10; }
 void Snake::increaseScoreByHundred() { std::cout << "INCREASING SCORE BY 100\n"; score += 100; }
 

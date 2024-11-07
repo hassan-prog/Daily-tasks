@@ -1,24 +1,24 @@
 #include "Obstacle.h"
 
 // Private functions
-void Obstacle::initObstacle() {
-	this->obstacle.setPosition(this->startPosition);
-	this->obstacle.setSize(sf::Vector2f(100.0f, 100.0f));
-	this->obstacle.setFillColor(sf::Color::Red);
-	this->obstacle.setOutlineColor(sf::Color::White);
-	this->obstacle.setOutlineThickness(2.0f);
+void Obstacle::initObstacle(sf::Vector2f startPosition, sf::Vector2f endPosition) {
+	this->startPosition = startPosition;
+	this->endPosition = endPosition;
+
+	obstacle.setPosition(startPosition);
+	obstacle.setSize(sf::Vector2f(80.0f, 80.0f));
+	obstacle.setFillColor(sf::Color(190, 59, 62));
+	obstacle.setOutlineColor(sf::Color::White);
+	obstacle.setOutlineThickness(1.0f);
 	//this->obstacle.setOrigin(this->obstacle.getSize().x / 2, this->obstacle.getSize().y / 2);
 }
 
 void Obstacle::initVars()
 {
-	// start and end position for back and forth movement
-	this->startPosition = sf::Vector2f(360.f, 540.f);
-	this->endPosition = sf::Vector2f(280.f, 400.f);
-	this->speed = 50.f;
+	speed = 20.0f;
 
 	// setting the direction
-	this->direction = endPosition - startPosition;
+	direction = endPosition - startPosition;
 
 	/*
 		- control movement speed independently of the vector’s length
@@ -32,13 +32,17 @@ void Obstacle::initVars()
 
 
 // Constructors & Destructors
-Obstacle::Obstacle() {
-	this->initVars();
-	this->initObstacle();
+Obstacle::Obstacle(sf::Vector2f startPosition, sf::Vector2f endPosition) {
+	initVars();
+	initObstacle(startPosition, endPosition);
 }
 
 const sf::RectangleShape& Obstacle::getObstacle() const {
-	return this->obstacle;
+	return obstacle;
+}
+
+void Obstacle::respawn() {
+	obstacle.setPosition(startPosition);
 }
 
 
@@ -46,14 +50,18 @@ const sf::RectangleShape& Obstacle::getObstacle() const {
 void Obstacle::updatePosition(float deltaTime) {
 	sf::Vector2f currentPosition = this->obstacle.getPosition();
 
-	if (std::abs(currentPosition.x - endPosition.x) < 1.0f
-		&& std::abs(currentPosition.y - endPosition.y) < 1.0f)
-	{
+	float distanceToStart = std::sqrt(
+		std::pow(currentPosition.x - startPosition.x, 2) +
+		std::pow(currentPosition.y - startPosition.y, 2));
+
+	float distanceToEnd = std::sqrt(
+		std::pow(currentPosition.x - endPosition.x, 2) +
+		std::pow(currentPosition.y - endPosition.y, 2));
+
+	if (distanceToEnd < 1.0f) {
 		this->direction = startPosition - endPosition;
 	}
-	else if (std::abs(currentPosition.x - startPosition.x) < 1.0f
-		&& std::abs(currentPosition.y - startPosition.y) < 1.0f)
-	{
+	else if (distanceToStart < 1.0f) {
 		this->direction = endPosition - startPosition;
 	}
 

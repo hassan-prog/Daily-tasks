@@ -64,6 +64,7 @@ public:
 	// functions
 	void lose(); // handle losing
 	void toggleLost();
+	void resetScore();
 
 	void resetPosition(); // reset to the original position
 	void cutSnake(int segments);

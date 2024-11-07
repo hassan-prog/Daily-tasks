@@ -72,7 +72,6 @@ void Collectable::extendPlayer(Snake& player, Direction& direction) {
 				snakeBody.push_back(SnakeSegment(tailHead.position.x - 1, tailHead.position.y));
 			}
 		}
-		player.increaseSpeed();
 
 	}
 	// if there's only 1 segment in the snake
@@ -89,9 +88,9 @@ void Collectable::extendPlayer(Snake& player, Direction& direction) {
 		else if (direction == Direction::Right) {
 			snakeBody.push_back(SnakeSegment(tailHead.position.x - 1, tailHead.position.y));
 		}
-		player.increaseSpeed();
 
 	}
+	player.increaseSpeed();
 }
 
 void Collectable::respawn() {
