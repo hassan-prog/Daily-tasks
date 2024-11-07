@@ -19,9 +19,16 @@ private:
 	int BLOCK_SIZE;
 
 	//Game objects
+	Collectable* extendPlayerCollectable;
+	sf::Color extendPlayerCollectableColor;
+
+	Collectable* slowSpeedCollectable;
+	sf::Color slowSpeedCollectableColor;
+
+	//Collectable* extendPlayerCollectable;
 	Obstacle* obstacle1;
-	Collectable* collectable1;
 	Snake* player;
+
 
 	//Mouse positions
 	sf::Vector2i windowMousePos;

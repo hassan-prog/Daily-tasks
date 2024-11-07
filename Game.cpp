@@ -10,8 +10,12 @@ void Game::initVariables() {
 	BLOCK_SIZE = 16;
 	videoMode.height = GRID_HEIGHT;
 	videoMode.width = GRID_WIDTH;
+	extendPlayerCollectableColor = sf::Color::Green;
+	slowSpeedCollectableColor = sf::Color::Cyan;
 
-	collectable1 = new Collectable();
+	// when i move these 4 vars into the constructor it doesn't render the colors nor the player
+	extendPlayerCollectable = new Collectable(extendPlayerCollectableColor);
+	slowSpeedCollectable = new Collectable(slowSpeedCollectableColor);
 	obstacle1 = new Obstacle();
 	player = new Snake(BLOCK_SIZE);
 }
@@ -42,7 +46,8 @@ Game::Game() {
 
 Game::~Game() {
 	delete snakeWindow;
-	delete collectable1;
+	delete extendPlayerCollectable;
+	delete slowSpeedCollectable;
 	delete obstacle1;
 	delete player;
 }
@@ -111,11 +116,17 @@ void Game::updateWorld() {
 
 		- gets mouse position relative to the window
 	*/
-	if ((*player).getPosition() == (*collectable1).item) {
-		std::cout << "IM GROWINGGGGGG\n";
-		player->grow();
+	if ((*player).getPosition() == (*extendPlayerCollectable).item) {
+		extendPlayerCollectable->extendPlayer(*player, player->getDirection());
 		player->increaseScore();
-		collectable1->respawn();
+		extendPlayerCollectable->respawn();
+	};
+
+	if ((*player).getPosition() == (*slowSpeedCollectable).item) {
+		slowSpeedCollectable->extendPlayer(*player, player->getDirection());
+		slowSpeedCollectable->slowPlayerSpeed(*player);
+		player->increaseScore();
+		slowSpeedCollectable->respawn();
 	};
 
 	this->loseIfOutOfBoundries();
@@ -127,9 +138,10 @@ void Game::update() {
 	handleUserInput();
 
 	float timestep = 1.0f / player->getSpeed();
+	float deltaTime = static_cast<float>(timeElabsed.asSeconds());
 
 	if (timeElabsed.asSeconds() >= timestep) {
-		player->update();
+		player->update(deltaTime);
 		updateWorld();
 		timeElabsed -= sf::seconds(timestep);
 		if (player->isLost()) {
@@ -137,7 +149,6 @@ void Game::update() {
 		}
 	};
 	// Calculate delta time for smooth movement
-	float deltaTime = timeElabsed.asMilliseconds();
 
 	this->obstacle1->updatePosition(deltaTime);
 }
@@ -151,11 +162,12 @@ void Game::render() {
 	this->snakeWindow->clear(sf::Color(23, 23, 23, 255));
 
 	player->render(*snakeWindow);
-	collectable1->render(*snakeWindow);
+	extendPlayerCollectable->render(*snakeWindow);
+	if (player->getScore() % 50 == 0 && player->getScore() != 0) {
+		slowSpeedCollectable->render(*snakeWindow);
+	}
 	obstacle1->render(*snakeWindow);
 	// Draw stuff here
 
 	this->snakeWindow->display();
 }
-
-

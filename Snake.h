@@ -14,7 +14,11 @@ enum class Direction { None, Up, Down, Left, Right };
 class Snake
 {
 private:
-	int speed;
+	// this is used to store the original speed value in the decreaseSpeed()
+	float originalSpeed;
+	float speedReductionTimer = 0.0f;  // Duration left for reduced speed
+
+	float speed;
 	int lives;
 	int score;
 	int size;
@@ -24,8 +28,6 @@ private:
 
 	Direction direction;
 	sf::RectangleShape rectBody; // used in rendering the snake
-
-
 	sf::Vector2f snakeSize;
 
 	// head
@@ -39,7 +41,6 @@ private:
 	// private functions
 	void initVars();
 	void checkCollision();
-	//void initSnake();
 
 public:
 	// constructors
@@ -47,9 +48,11 @@ public:
 	~Snake();
 
 	// getters and setters
-	Direction getDirection();
+	SnakeContainer& getSnakeBody();
+	Direction& getDirection();
 	void setDirection(Direction dir);
-	int getSpeed();
+	void increaseSpeed();
+	float getSpeed();
 	int getLives();
 	int getScore();
 	sf::Vector2i getPosition();
@@ -60,11 +63,11 @@ public:
 	void lose(); // handle losing
 	void toggleLost();
 
-	void grow(); 
 	void resetPosition(); // reset to the original position
 	void cutSnake(int segments);
 
 	void moveSnake();
-	void update();
+	void decreaseSpeedTemporary(float duration);
+	void update(float deltaTime);
 	void render(sf::RenderWindow& window); // render the snake
 };

@@ -9,24 +9,25 @@ private:
 	int windowHeight;
 	int windowWidth;
 	int blockSize;
+	sf::Color collectableColor;
 
 	sf::CircleShape shape;
 
 	//private functions
 	void generateRandomPosition(int& x, int& y);
-	void initCollectable();
+	void initCollectable(sf::Color color);
 	void initVars();
 
 public:
 	sf::Vector2i item;
 
 	const sf::CircleShape& getShape() const;
-	void speed(Snake* snake);
-	void health(Snake* snake);
+	void slowPlayerSpeed(Snake& snakeBody);
+	void extendPlayer(Snake& snakeBody, Direction& direction);
 	void score(Snake* snake);
 	void respawn();
 	void render(sf::RenderWindow& window); // render the collectable
 
-	Collectable();
+	Collectable(sf::Color color);
 };
 

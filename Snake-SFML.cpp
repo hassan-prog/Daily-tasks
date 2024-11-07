@@ -2,9 +2,9 @@
 #include "Game.h"
 #include "Snake.h"
 
-void main(int argc, char** argv[]) {
-	srand(time(0));
-	Game snakeGame; 
+int main(int argc, char** argv[]) {
+	srand(static_cast<unsigned int>(time(0)));
+	Game snakeGame;
 
 	while (snakeGame.isRunning()) {
 		// update
@@ -16,4 +16,5 @@ void main(int argc, char** argv[]) {
 		// restarting the clock each iteration
 		snakeGame.restartClock();
 	}
+	return 0;
 }
