@@ -7,20 +7,16 @@
 
 using namespace std;
 
-
 int main() {
-	// SFML Setup
 	sf::RenderWindow window(sf::VideoMode(SCREEN_WITDH, SCREEN_HEIGHT), "Solar System");
 	window.setFramerateLimit(60);
 
-	// Box2D World Setup
 	b2Vec2 gravity(0.0f, 0.0f);
 	b2World world(gravity);
 
 	Sun sun(&world);
 	vector<Planet*> planets;
 
-	// Main Loop
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -40,31 +36,29 @@ int main() {
 		for (auto planet : planets) {
 			b2Vec2 direction = sun.body->GetPosition() - planet->body->GetPosition();
 			float distance = direction.Length();
-			direction.Normalize();
+			if (distance > 0.0f) {
+				direction.Normalize();
 
-			float forceMagnitude = G * sun.mass * planet->mass / (distance * distance);
-			b2Vec2 force = forceMagnitude * direction;
+				float forceMagnitude = G * sun.mass * planet->mass / (distance * distance);
+				b2Vec2 force = forceMagnitude * direction;
 
-			planet->body->ApplyForceToCenter(force, true);
-			planet->Update();
-			/*std::cout << "Planet velocity: " << planet->body->GetLinearVelocity().x << ", "
-				<< planet->body->GetLinearVelocity().y << std::endl;*/
-			std::cout << "Planet POS: " << planet->body->GetPosition().x << ", "
-				<< planet->body->GetPosition().y << std::endl;
-			std::cout << "Shape POS: " << planet->getPlanetShape().getPosition().x << ", "
-				<< planet->getPlanetShape().getPosition().y << std::endl;
+				planet->body->ApplyForceToCenter(force, true);
+				planet->Update();
 
+				// Orbital decay
+				b2Vec2 decay = -planet->body->GetLinearVelocity();
+				decay = DECAY_MULTIPLIER * direction;
+				planet->body->ApplyForceToCenter(decay, true);
+			}
 		}
 
-		world.Step(1.0f / 60.0f, 6, 2);
+		world.Step(1.0f / 50.0f, 6, 2);
 
-		// Rendering
 		window.clear();
 		window.draw(sun.getSunShape());
 		for (auto planet : planets) {
 			window.draw(planet->getPlanetShape());
 		}
-		//window.draw(boxRect);
 		window.display();
 	}
 

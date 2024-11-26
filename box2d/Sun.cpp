@@ -12,7 +12,7 @@ Sun::Sun(b2World* world) {
 
 	body = world->CreateBody(&bodyDef);
 
-	circleShape.m_radius = radius;
+	circleShape.m_radius = radius / POS_SCALER;
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &circleShape;
