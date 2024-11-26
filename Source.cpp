@@ -4,30 +4,22 @@
 #include <gl/glew/glew.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
-#include<gl\glm\glm.hpp>
+#include <gl\glm\glm.hpp>
 #include <math.h>
 
 using namespace std;
 using namespace glm;
 
 
-enum DrawingMode
-{
+enum DrawingMode {
 	Points,
 	Lines,
 	FilledTriangle
 };
 
-struct Vertex
-{
-	vec3 Position;
-	vec3 COlor;
-};
-
 const GLint WIDTH = 600, HEIGHT = 600;
 GLuint VBO, BasiceprogramId;
 DrawingMode Current_DrawingMode = DrawingMode::FilledTriangle;
-
 
 GLuint InitShader(const char* vertex_shader_file_name, const char* fragment_shader_file_name);
 
