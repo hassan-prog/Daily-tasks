@@ -16,6 +16,7 @@ int main() {
 
 	Sun sun(&world);
 	vector<Planet*> planets;
+	vector<Planet*> destroyPlanets;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -50,14 +51,26 @@ int main() {
 				decay = DECAY_MULTIPLIER * direction;
 				planet->body->ApplyForceToCenter(decay, true);
 			}
+			if (distance * POS_SCALER <= sun.radius + planet->radius) {
+				destroyPlanets.push_back(planet);
+				planet->trail.clear();
+				world.DestroyBody(planet->body);
+			}
+			destroyPlanets.clear();
 		}
 
 		world.Step(1.0f / 50.0f, 6, 2);
 
 		window.clear();
 		window.draw(sun.getSunShape());
+		
 		for (auto planet : planets) {
-			window.draw(planet->getPlanetShape());
+			window.draw(planet->trail);
+			planet->trail.clear();
+		}
+
+		for (auto planet : planets) {
+			window.draw(planet->planetShape);
 		}
 		window.display();
 	}
