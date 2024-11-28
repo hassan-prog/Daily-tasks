@@ -36,6 +36,23 @@ const GLint WIDTH = 600, HEIGHT = 600;
 GLuint VBO_Triangle, VBO_Cube, IBO, BasiceprogramId;
 DrawingMode Current_DrawingMode = DrawingMode::FilledTriangle;
 
+// Camera
+vec3 cameraPos(0.0f, 0.0f, 3.0f);
+vec3 cameraLookAt(0.0f, 0.0f, -1.0f);
+vec3 cameraUp(0.0f, 1.0f, 0.0f);
+float yaw = -90.0f;
+float pitch = 0.0f;
+float fov = 60.0f;
+
+// Mouse state
+bool mouseFirst = true;
+float lastX = (float)WIDTH / 2.0f;
+float lastY = (float)HEIGHT / 2.0f;
+
+glm::mat4 viewMat;
+
+float deltaTime = 0.0f;
+
 // transformation
 GLuint modelMatLoc, viewMatLoc, projMatLoc;
 
@@ -204,7 +221,7 @@ int Init()
 	cout << "\tVersion: " << glGetString(GL_VERSION) << endl;
 	cout << "\tGLSL:" << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 
-	CompileShader("VS.glsl", "FS.glsl", BasiceprogramId);
+	CompileShader("VS2.glsl", "FS2.glsl", BasiceprogramId);
 	//CreateTriangle();
 	CreateCube();
 
@@ -212,10 +229,10 @@ int Init()
 	viewMatLoc = glGetUniformLocation(BasiceprogramId, "viewMat");
 	projMatLoc = glGetUniformLocation(BasiceprogramId, "projMat");
 
-	glm::mat4 viewMat = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 viewMat = lookAt(cameraPos, cameraPos + cameraLookAt, cameraUp);
 	glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
 
-	glm::mat4 projMat = glm::perspectiveFov(60.0f, (float)WIDTH, (float)HEIGHT, 0.1f, 100.0f);
+	glm::mat4 projMat = glm::perspectiveFov(radians(fov), (float)WIDTH, (float)HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, glm::value_ptr(projMat));
 
 	glClearColor(0, 0.5, 0.5, 1);
@@ -225,14 +242,15 @@ int Init()
 }
 
 float theta = 0;
+
 void Update() {
 	// add all tick code
 	theta += 0.001f;
 }
 
+
 void createBody() {
 	glm::mat4 ModelMat;
-
 	// Head
 	ModelMat = glm::translate(glm::vec3(0.f, 1.5f, -0.5f)) *
 		//glm::rotate(theta * 180 / 3.14f, glm::vec3(0.f, 1.f, 0.f)) *
@@ -276,6 +294,27 @@ void createBody() {
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
 }
 
+void handleInput(sf::RenderWindow& window) {
+	float cameraSpeed = 2.5f * deltaTime;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		cameraPos += cameraSpeed * cameraLookAt;
+		cout << "Pressed W\n" << endl;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+		cameraPos -= cameraSpeed * cameraLookAt;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		cameraPos += normalize(cross(cameraLookAt, cameraUp)) * cameraSpeed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		cameraPos -= normalize(cross(cameraLookAt, cameraUp)) * cameraSpeed;
+	}
+
+	viewMat = lookAt(cameraPos, cameraPos + cameraLookAt, cameraUp);
+	glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
+}
+
 void Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -296,53 +335,53 @@ void Render() {
 	}
 
 	BindCube();
-
 	createBody();
 }
 
 int main()
 {
 	sf::ContextSettings context;
+	sf::Clock clock;
 	context.depthBits = 24;
-	sf::Window window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!", sf::Style::Close, context);
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!", sf::Style::Close, context);
 
 	if (Init()) return 1;
 
-	while (window.isOpen())
-	{
+	while (window.isOpen()) {
 		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			switch (event.type)
-			{
-			case sf::Event::Closed:
-			{
+		while (window.pollEvent(event)) {
+			switch (event.type) {
+			case sf::Event::Closed: {
 				window.close();
 				break;
 			}
-			case sf::Event::KeyPressed:
-			{
-				if (event.key.code == sf::Keyboard::Num1)
-				{
+			case sf::Event::KeyPressed: {
+				if (event.key.code == sf::Keyboard::Num1) {
 					Current_DrawingMode = DrawingMode::Points;
 				}
-				if (event.key.code == sf::Keyboard::Num2)
-				{
+				if (event.key.code == sf::Keyboard::Num2) {
 					Current_DrawingMode = DrawingMode::Lines;
 				}
-				if (event.key.code == sf::Keyboard::Num3)
-				{
+				if (event.key.code == sf::Keyboard::Num3) {
 					Current_DrawingMode = DrawingMode::FilledTriangle;
 				}
 				break;
 			}
 			}
 		}
+		deltaTime = clock.restart().asSeconds();
+		handleInput(window);
 
 		Update();
 		Render();
 
 		window.display();
 	}
+
+	glDeleteBuffers(1, &VBO_Triangle);
+	glDeleteBuffers(1, &VBO_Cube);
+	glDeleteBuffers(1, &IBO);
+	glDeleteProgram(BasiceprogramId);
+
 	return 0;
 }
