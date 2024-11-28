@@ -2,9 +2,9 @@
 #include <gl/glew/glew.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
-#include<gl\glm\glm.hpp>
-#include<gl\glm\gtc\type_ptr.hpp>
-#include<gl\glm\gtx\transform.hpp>
+#include <gl\glm\glm.hpp>
+#include <gl\glm\gtc\type_ptr.hpp>
+#include <gl\glm\gtx\transform.hpp>
 #include "Source.h"
 
 using namespace std;
@@ -40,18 +40,18 @@ DrawingMode Current_DrawingMode = DrawingMode::FilledTriangle;
 vec3 cameraPos(0.0f, 0.0f, 3.0f);
 vec3 cameraLookAt(0.0f, 0.0f, -1.0f);
 vec3 cameraUp(0.0f, 1.0f, 0.0f);
-float yaw = -90.0f;
-float pitch = 0.0f;
-float fov = 60.0f;
 
-// Mouse state
-bool mouseFirst = true;
-float lastX = (float)WIDTH / 2.0f;
-float lastY = (float)HEIGHT / 2.0f;
+float fov = 60.0f;
+float x_mouseMovement = -90.0f;
+float y_mouseMovement = 0.0f;
 
 glm::mat4 viewMat;
 
-float deltaTime = 0.0f;
+float deltaTime = 0.f;
+// Mouse
+float mouseSensitivity = 0.005f;
+//sf::Vector2i lastMousePos;
+sf::Vector2i lastMousePos(WIDTH / 2, HEIGHT / 2);
 
 // transformation
 GLuint modelMatLoc, viewMatLoc, projMatLoc;
@@ -201,8 +201,7 @@ void CompileShader(const char* vertex_shader_file_name, const char* fragment_sha
 	glUseProgram(programId);
 }
 
-int Init()
-{
+int Init() {
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
@@ -222,6 +221,7 @@ int Init()
 	cout << "\tGLSL:" << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 
 	CompileShader("VS2.glsl", "FS2.glsl", BasiceprogramId);
+
 	//CreateTriangle();
 	CreateCube();
 
@@ -232,7 +232,7 @@ int Init()
 	glm::mat4 viewMat = lookAt(cameraPos, cameraPos + cameraLookAt, cameraUp);
 	glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(viewMat));
 
-	glm::mat4 projMat = glm::perspectiveFov(radians(fov), (float)WIDTH, (float)HEIGHT, 0.1f, 100.0f);
+	glm::mat4 projMat = glm::perspectiveFov(fov, (float)WIDTH, (float)HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, glm::value_ptr(projMat));
 
 	glClearColor(0, 0.5, 0.5, 1);
@@ -294,12 +294,11 @@ void createBody() {
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
 }
 
-void handleInput(sf::RenderWindow& window) {
+void handleInput() {
 	float cameraSpeed = 2.5f * deltaTime;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 		cameraPos += cameraSpeed * cameraLookAt;
-		cout << "Pressed W\n" << endl;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 		cameraPos -= cameraSpeed * cameraLookAt;
@@ -340,14 +339,23 @@ void Render() {
 
 int main()
 {
+	bool mouseGrabbed = true;
+	bool mouseVisible = false;
+	bool rightMousePressed = false;
+
 	sf::ContextSettings context;
-	sf::Clock clock;
 	context.depthBits = 24;
+
+	sf::Clock clock;
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!", sf::Style::Close, context);
 
 	if (Init()) return 1;
 
+	window.setMouseCursorVisible(mouseVisible);
+	window.setMouseCursorGrabbed(mouseGrabbed);
+
 	while (window.isOpen()) {
+		deltaTime = clock.restart().asSeconds();
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -365,23 +373,60 @@ int main()
 				if (event.key.code == sf::Keyboard::Num3) {
 					Current_DrawingMode = DrawingMode::FilledTriangle;
 				}
+				// press Left Ctrl to enable mouse curser
+				if (event.key.code == sf::Keyboard::LControl) {
+					mouseGrabbed = !mouseGrabbed;
+					mouseVisible = !mouseVisible;
+					window.setMouseCursorVisible(mouseVisible);
+					window.setMouseCursorGrabbed(mouseGrabbed);
+				}
+				break;
+			}
+			case sf::Event::MouseButtonPressed:
+			{
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					rightMousePressed = true;
+					sf::Mouse::setPosition(sf::Vector2i(WIDTH / 2, HEIGHT / 2), window);
+				}
+				break;
+			}
+			case sf::Event::MouseButtonReleased:
+			{
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					rightMousePressed = false;
+				}
+				break;
+			}
+			case sf::Event::MouseMoved:
+			{
+				if (rightMousePressed) {
+					sf::Vector2i currentMousePos = sf::Mouse::getPosition(window);
+					sf::Vector2i mouseDelta = currentMousePos - lastMousePos;
+
+					x_mouseMovement += mouseDelta.x * mouseSensitivity;
+					y_mouseMovement -= mouseDelta.y * mouseSensitivity;
+
+					y_mouseMovement = clamp(y_mouseMovement, -89.0f, 89.0f);
+
+					cameraLookAt.x = cos(x_mouseMovement) * cos(y_mouseMovement);
+					cameraLookAt.y = sin(y_mouseMovement);
+					cameraLookAt.z = sin(x_mouseMovement) * cos(y_mouseMovement);
+
+					cameraLookAt = normalize(cameraLookAt);
+
+					sf::Mouse::setPosition(sf::Vector2i(WIDTH / 2, HEIGHT / 2), window);
+					lastMousePos = sf::Vector2i(WIDTH / 2, HEIGHT / 2);
+				}
 				break;
 			}
 			}
 		}
-		deltaTime = clock.restart().asSeconds();
-		handleInput(window);
+		handleInput();
 
 		Update();
 		Render();
 
 		window.display();
 	}
-
-	glDeleteBuffers(1, &VBO_Triangle);
-	glDeleteBuffers(1, &VBO_Cube);
-	glDeleteBuffers(1, &IBO);
-	glDeleteProgram(BasiceprogramId);
-
 	return 0;
 }
