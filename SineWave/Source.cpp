@@ -10,26 +10,54 @@
 using namespace std;
 using namespace glm;
 
+enum DrawingMode
+{
+	Points,
+	Lines,
+	FilledTriangle
+};
+
 struct Vertex {
 	vec3 position;
 	vec3 color;
-	Vertex(vec3 _position, vec3 _color) : position{ _position }, color{ _color } {}
+	//Vertex(vec3 _position, vec3 _color) : position{ _position }, color{ _color } {}
 };
 
 const GLint WIDTH = 600, HEIGHT = 600;
-GLuint VBO, VAO, BasiceprogramId;
-
-vector<Vertex> currentLine;
-vector<vector<Vertex>> lines;
+GLuint VBO, BasiceprogramId;
+DrawingMode Current_DrawingMode = DrawingMode::Lines;
 
 GLuint InitShader(const char* vertex_shader_file_name, const char* fragment_shader_file_name);
 
-// Updates the VBO with the current line data
-void UpdateBuffer() {
-	if (!currentLine.empty()) {
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, currentLine.size() * sizeof(Vertex), currentLine.data(), GL_DYNAMIC_DRAW);
+void CreateSine()
+{
+	GLfloat CircleVertices[200 * 6];
+
+	float numberOfVertices = sizeof(CircleVertices) / sizeof(GLfloat);
+
+	for (int i = 0; i < numberOfVertices; i += 6)
+	{
+		CircleVertices[i] = -1 + 2 * i / numberOfVertices;
+		CircleVertices[i + 1] = 0.5 * sin((-1 + 2 * i / numberOfVertices) * 3.14 * 36) * sin((-1 + 2 * i / numberOfVertices) * 3.14 * 3);
+		CircleVertices[i + 2] = 0;
+		CircleVertices[i + 3] = .7;
+		CircleVertices[i + 4] = .1;
+		CircleVertices[i + 5] = .4;
 	}
+
+	// create buffer object
+	glGenBuffers(1, &VBO);
+
+	// binding buffer object
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(CircleVertices), CircleVertices, GL_STATIC_DRAW);
+
+	// shader
+	glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * sizeof(GL_FLOAT), 0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(GL_FLOAT), (char*)(3 * sizeof(GL_FLOAT)));
+	glEnableVertexAttribArray(1);
 }
 
 void CompileShader(const char* vertex_shader_file_name, const char* fragment_shader_file_name, GLuint& programId) {
@@ -41,28 +69,16 @@ int Init() {
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
 		cerr << "GLEW initialization error\n";
+		getchar();
 		return 1;
 	}
 
 	// Print OpenGL version info
 	cout << "OpenGL version: " << glGetString(GL_VERSION) << endl;
 
-	// Create and configure VAO and VBO
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-	glEnableVertexAttribArray(0);
-
-	// Color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
-	glEnableVertexAttribArray(1);
-
+	// Create and configure VBO
 	CompileShader("VS3.glsl", "FS3.glsl", BasiceprogramId);
+	CreateSine();
 
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
@@ -71,24 +87,34 @@ int Init() {
 
 void Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glLineWidth(3.0f);
 
-	glUseProgram(BasiceprogramId);
-	glBindVertexArray(VAO);
-
-	for (const auto& line : lines) {
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, line.size() * sizeof(Vertex), line.data(), GL_DYNAMIC_DRAW);
-
-		glDrawArrays(GL_LINE_STRIP, 0, line.size());
+	switch (Current_DrawingMode)
+	{
+	case Points:
+		glPointSize(10);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		break;
+	case Lines:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		break;
+	case FilledTriangle:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		break;
+	default:
+		break;
 	}
 
-	if (!currentLine.empty()) {
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, currentLine.size() * sizeof(Vertex), currentLine.data(), GL_DYNAMIC_DRAW);
+	glDrawArrays(GL_LINE_STRIP, 0, 200);
+}
 
-		glDrawArrays(GL_LINE_STRIP, 0, currentLine.size());
-	}
+float theta = 0;
+void Update()
+{
+	// add all tick code
+	theta += 0.00005f;
+
+	GLuint Theta_Location = glGetUniformLocation(BasiceprogramId, "theta");
+	glUniform1f(Theta_Location, theta);
 }
 
 int main() {
@@ -107,27 +133,29 @@ int main() {
 				window.close();
 
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-				float ndcX = 2.0f * mousePos.x / WIDTH - 1.0f;
-				float ndcY = 1.0f - 2.0f * mousePos.y / HEIGHT;
-
-				Vertex newVertex(vec3(ndcX, ndcY, 0.0f), vec3(0.0f, 0.0f, 0.0f));
-				currentLine.push_back(newVertex);
-
-				UpdateBuffer();
-			}
-
-			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
-				if (!currentLine.empty()) {
-					lines.push_back(currentLine);
-					currentLine.clear();
+			switch (event.type) {
+			case sf::Event::KeyPressed: 
+			{
+				if (event.key.code == sf::Keyboard::Num1)
+				{
+					Current_DrawingMode = DrawingMode::Points;
 				}
+				if (event.key.code == sf::Keyboard::Num2)
+				{
+					Current_DrawingMode = DrawingMode::Lines;
+				}
+				if (event.key.code == sf::Keyboard::Num3)
+				{
+					Current_DrawingMode = DrawingMode::FilledTriangle;
+				}
+				break;
+			}
 			}
 		}
 
+		Update();
 		Render();
+
 		window.display();
 	}
 
