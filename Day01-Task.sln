@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawLine", "DrawLine\DrawLi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SineWave", "SineWave\SineWave.vcxproj", "{D93AC16E-3513-4D46-A0E0-EE8DDB81F05A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Seripinski", "Seripinski\Seripinski.vcxproj", "{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{D93AC16E-3513-4D46-A0E0-EE8DDB81F05A}.Release|x64.Build.0 = Release|x64
 		{D93AC16E-3513-4D46-A0E0-EE8DDB81F05A}.Release|x86.ActiveCfg = Release|Win32
 		{D93AC16E-3513-4D46-A0E0-EE8DDB81F05A}.Release|x86.Build.0 = Release|Win32
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Debug|x64.ActiveCfg = Debug|x64
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Debug|x64.Build.0 = Debug|x64
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Debug|x86.ActiveCfg = Debug|Win32
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Debug|x86.Build.0 = Debug|Win32
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Release|x64.ActiveCfg = Release|x64
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Release|x64.Build.0 = Release|x64
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Release|x86.ActiveCfg = Release|Win32
+		{D0AFF8B2-4C25-4CD7-B66B-24C617E133ED}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
