@@ -1,73 +1,46 @@
 #include <iostream>
-#include <gl/glew/glew.h>
+
 #include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
+#include "../Game.h"
 
-using namespace std;
+const unsigned int SCREEN_WIDTH = 800;
+const unsigned int SCREEN_HEIGHT = 600;
 
-const GLint WIDTH = 600, HEIGHT = 600;
-
-int Init()
-{
-	GLenum err = glewInit();
-	if (err != GLEW_OK)
-	{
-		cout << "Error";
-		getchar();
-		return 1;
-	}
-	else
-	{
-		if (GLEW_VERSION_3_0)
-			cout << "Driver support OpenGL 3.0\nDetails:\n";
-	}
-	cout << "\tUsing glew " << glewGetString(GLEW_VERSION) << endl;
-	cout << "\tVendor: " << glGetString(GL_VENDOR) << endl;
-	cout << "\tRenderer: " << glGetString(GL_RENDERER) << endl;
-	cout << "\tVersion: " << glGetString(GL_VERSION) << endl;
-	cout << "\tGLSL:" << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
-
-	glClearColor(1, 0, 0, 1);
-
-	return 0;
-}
-
-void Render()
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-}
-
-void Update()
-{
-	// add all tick code
-}
+Game Breakout(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main()
 {
-	sf::ContextSettings context;
-	context.depthBits = 24;
-	sf::Window window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!", sf::Style::Close, context);
+    sf::ContextSettings context;
+    context.depthBits = 24;
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Brick Breaker", sf::Style::Close, context);
 
-	if (Init()) return 1;
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			switch (event.type)
-			{
+    sf::Clock clock;
 
-			case sf::Event::Closed:
-				window.close();
-				break;
-			}
-		}
+    Breakout.Init();
 
-		Update();
-		Render();
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            switch (event.type)
+            {
+            case sf::Event::Closed:
+            {
+                window.close();
+                break;
+            }
+            }
+        }
 
-		window.display();
-	}
-	return 0;
+        float deltaTime = clock.restart().asSeconds();
+
+        Breakout.ProcessInput(window, deltaTime);
+        Breakout.Update(deltaTime);
+        Breakout.Render(deltaTime);
+        window.display();
+    }
+
+    return 0;
 }

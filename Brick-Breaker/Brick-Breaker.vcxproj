@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2facac6a-4911-4dae-9f22-fced3eacade2}</ProjectGuid>
+    <ProjectGuid>{4d813cf0-8ff8-49be-98ad-f513fedb86b6}</ProjectGuid>
     <RootNamespace>Brick_Breaker</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -82,7 +82,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)OpenGLSFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-main-d.lib;opengl32.lib;glew32.lib;sfml-graphics-d.lib;sfml-system-d.lib;sfml-window-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-main-d.lib;opengl32.lib;glew32.lib;sfml-graphics-d.lib;sfml-system-d.lib;sfml-window-d.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,7 +133,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BallObject.cpp" />
+    <ClCompile Include="..\Game.cpp" />
+    <ClCompile Include="..\GameLevel.cpp" />
+    <ClCompile Include="..\GameObject.cpp" />
+    <ClCompile Include="..\ResourceManager.cpp" />
+    <ClCompile Include="..\Shader.cpp" />
+    <ClCompile Include="..\SpriteRenderer.cpp" />
+    <ClCompile Include="..\Texture.cpp" />
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="PostProcessor.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\FS.glsl" />
+    <None Include="..\shaders\post_processing.frag" />
+    <None Include="..\shaders\post_processing.vs" />
+    <None Include="..\shaders\sprite.frag" />
+    <None Include="..\shaders\sprite.vs" />
+    <None Include="..\VS.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\BallObject.h" />
+    <ClInclude Include="..\Game.h" />
+    <ClInclude Include="..\GameLevel.h" />
+    <ClInclude Include="..\GameObject.h" />
+    <ClInclude Include="..\ResourceManager.h" />
+    <ClInclude Include="..\Shader.h" />
+    <ClInclude Include="..\SpriteRenderer.h" />
+    <ClInclude Include="..\Texture.h" />
+    <ClInclude Include="PostProcessor.h" />
+    <ClInclude Include="PowerUp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
