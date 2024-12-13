@@ -18,16 +18,5 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ShaderFunctions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="VS2.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="FS2.glsl">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
