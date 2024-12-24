@@ -5,8 +5,11 @@ internal class Program
     private static void Main(string[] args)
     {
         Console.WriteLine($"Dividing 10/5 using Maths class: {Maths.Divide(10, 5)}");
-        Console.WriteLine();
 
+        Duration test = new Duration(3800);
+
+        Console.WriteLine(test);
+        Console.WriteLine();
         int pointCounter = 0;
         Point3D[] arrayOfPoint3D = new Point3D[2];
         Console.Write($"Please enter the coordenates for 2 points");
