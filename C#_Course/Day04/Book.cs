@@ -17,7 +17,8 @@
         }
         public override string ToString()
         {
-            return $"Book Title: {Title}, Authors: {Authors}, Price: {Price}, Published on: {PublicationDate.ToString()}";
+            return $"Book Title: {Title}, Authors: {Authors}, Price: {Price}, " +
+                $"Was Published on: {PublicationDate.ToString()}";
         }
     }
 }
