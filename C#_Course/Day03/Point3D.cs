@@ -67,7 +67,6 @@
         }
         public object Clone()
         {
-            // Return a new Point3D object with the same values
             return new Point3D(this.X, this.Y, this.Z);
         }
         #endregion

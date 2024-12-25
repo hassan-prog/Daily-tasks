@@ -117,7 +117,7 @@
             Duration temp = new Duration(totalSeconds);
             return new Duration(left.Hours - temp.Hours, left.Minutes - temp.Minutes, left.Seconds - temp.Seconds);
         }
-        
+
         // Increment and Decrement operators
         public static Duration operator ++(Duration duration)
         {
@@ -151,14 +151,20 @@
             return left.toSeconds() <= right.toSeconds();
         }
 
-        public static bool operator true(Duration duration)
+        public static implicit operator bool(Duration d)
         {
-            return duration.Hours != 0 || duration.Minutes != 0 || duration.Seconds != 0;
+            return (d.Hours == 0 && d.Minutes == 0 && d.Seconds == 0) ? false : true;
         }
-
-        public static bool operator false(Duration duration)
+        public static explicit operator DateTime(Duration d)
         {
-            return duration.Hours == 0 && duration.Minutes == 0 && duration.Seconds == 0;
+            int totalDays = d.Hours / 24;
+            int hours = d.Hours % 24;
+
+            int days = totalDays % 30;
+            int months = (totalDays / 30) % 12;
+            int years = totalDays / 360;
+
+            return new DateTime(2000 + years, 1 + months, 1 + days, hours, d.Minutes, d.Seconds);
         }
         #endregion
 
