@@ -157,14 +157,11 @@
         }
         public static explicit operator DateTime(Duration d)
         {
-            int totalDays = d.Hours / 24;
-            int hours = d.Hours % 24;
-
-            int days = totalDays % 30;
-            int months = (totalDays / 30) % 12;
-            int years = totalDays / 360;
-
-            return new DateTime(2000 + years, 1 + months, 1 + days, hours, d.Minutes, d.Seconds);
+            DateTime referenceDate = DateTime.Today;
+            return referenceDate
+                .AddHours(d.Hours)
+                .AddMinutes(d.Minutes)
+                .AddSeconds(d.Seconds);
         }
         #endregion
 

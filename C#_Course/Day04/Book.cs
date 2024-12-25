@@ -2,6 +2,8 @@
 {
     public class Book
     {
+        public delegate T GeneralDel<in T1, out T>(T1 x);
+
         public string ISBN { get; set; }
         public string Title { get; set; }
         public string[] Authors { get; set; }
@@ -17,8 +19,8 @@
         }
         public override string ToString()
         {
-            return $"Book Title: {Title}, Authors: {Authors}, Price: {Price}, " +
-                $"Was Published on: {PublicationDate.ToString()}";
+            return $"Book Title: {Title}, Authors: {string.Join(", ", Authors)}, Price: {Price:C}, " +
+                $"Was Published on: {PublicationDate.ToShortDateString()}, ISBN: {ISBN}";
         }
     }
 }
