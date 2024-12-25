@@ -1,8 +1,8 @@
 ﻿namespace Day04
 {
+    public delegate T GeneralDel<in T1, out T>(T1 x);
     public class Book
     {
-        public delegate T GeneralDel<in T1, out T>(T1 x);
 
         public string ISBN { get; set; }
         public string Title { get; set; }

@@ -1,6 +1,4 @@
-﻿using static Day04.Book;
-
-namespace Day04
+﻿namespace Day04
 {
     public class LibraryEngine
     {
