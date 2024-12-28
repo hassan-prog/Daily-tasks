@@ -26,7 +26,19 @@
         }
 
         public int EmployeeID { get; set; }
-        public DateTime BirthDate { get; set; }
+        DateTime birthDate;
+        public DateTime BirthDate
+        {
+            get { return birthDate; }
+            set
+            {
+                birthDate = value;
+                if ((DateTime.Now - birthDate).TotalDays / 365 >= 60)
+                {
+                    OnEmployeeLayOff(new EmployeeLayOffEventArgs(LayOffCause.AgeLimitExceeded));
+                }
+            }
+        }
         public int VacationStock { get; set; }
 
         public bool RequestVacation(DateTime From, DateTime To)
@@ -46,10 +58,14 @@
             {
                 OnEmployeeLayOff(new EmployeeLayOffEventArgs(LayOffCause.VacationStockNegative));
             }
-            if ((DateTime.Now.Year - BirthDate.Year) > 60)
+            if ((DateTime.Now.Year - birthDate.Year) > 60)
             {
                 OnEmployeeLayOff(new EmployeeLayOffEventArgs(LayOffCause.AgeLimitExceeded));
             }
+        }
+        public override string ToString()
+        {
+            return $"Employee ID: {EmployeeID}\nBirthday: {birthDate.Date.ToString("D")}\nVacation Stock: {VacationStock}\n";
         }
     }
 }

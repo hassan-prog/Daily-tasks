@@ -4,13 +4,12 @@
     {
         public int ClubID { get; set; }
         public string ClubName { get; set; }
-        private List<Employee> Members;
+        private List<Employee> Members = new List<Employee>();
         public void AddMember(Employee E)
         {
             Members.Add(E);
             E.EmployeeLayOff += RemoveMember;
         }
-        ///CallBackMethod
         public void RemoveMember(object sender, EmployeeLayOffEventArgs e)
         {
             Employee? employee = sender as Employee;
@@ -23,6 +22,15 @@
             {
                 Console.WriteLine($"Employee {employee.EmployeeID} is still a member of Club despite being older than 60");
             }
+        }
+        public override string ToString()
+        {
+            string str = $"Club ID : {ClubID}\nname :{ClubName}";
+            foreach (Employee e in Members)
+            {
+                str += "\n@@@@@@@@@@@@@@@\n" + e.ToString();
+            }
+            return str;
         }
     }
 }
